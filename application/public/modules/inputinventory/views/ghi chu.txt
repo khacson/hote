@@ -1,0 +1,6 @@
+- VNĐ/% Ex: 2% hoạc 2,000
+
++ Giảm tiền (Giảm trên tổng tiền VD: SL 10 X 1000 = 10,000, giảm 500 còn 9,500)
++ Giảm %
+
+- Xóa phải quy đổi đơn vị
