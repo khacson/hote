@@ -1068,7 +1068,7 @@
 				$('.ttchietkhau').html(object.discount);
 				$('#input_total').val(object.priceEnd);
 				$('#price_prepay').val(object.priceEnd);
-				$('#prepay_1').prop('checked',true);
+				//$('#prepay_1').prop('checked',true);
 				$('#price_indebtedness').val(0);
 			}
 		}); 
