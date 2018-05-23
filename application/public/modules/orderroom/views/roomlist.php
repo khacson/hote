@@ -13,9 +13,13 @@
 	elseif($item->isstatus == 4){
 		$style= 'style="background:#658daf;"';
 	}
-	$persion = '3 Người';
+	$persion = $item->tongkhac. ' Người';
 	if($item->isstatus == 1){
 		$persion = number_format($item->price).'đ';
+	}
+	$timestart = '';
+	if(!empty($item->timestart)){
+		$timestart = date(cfdate().' H:i',strtotime($item->timestart))."(20')";
 	}
 	?>
 	<div class="col-md-2 dashboard-item dashboard-items" >
@@ -28,7 +32,7 @@
 			</div>
 			<div class="details">
 				<div class="number" ><?=$item->room_name;?></div>
-				<div class="desc f11"><?=$timenow;?></div>
+				<div class="desc f11"><?=$timestart;?></div>
 			</div>
 			<a class="more" href="#">
 			Mở phòng 

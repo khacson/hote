@@ -82,7 +82,21 @@
 			$and.= " and r.branchid = '".$login->branchid ."'";
 		}
 		$sql = "
-			select r.*
+			select r.*,
+				(
+					SELECT COUNT(1) tt
+					FROM `".$tb['hotel_orderroom']."` hor
+					LEFT JOIN `".$tb['hotel_customer_history']."`  ch ON ch.oderromid = hor.id
+					WHERE hor.roomid = r.id
+					AND hor.isnew = 1
+					GROUP BY  hor.id
+				) tongkhac,
+				(
+					SELECT hor.datecreate
+					FROM `".$tb['hotel_orderroom']."` hor
+					WHERE hor.roomid = r.id
+					AND hor.isnew = 1
+				) timestart
 				from `".$tb['hotel_room']."` r
 				where r.isdelete = 0
 				$and

@@ -70,6 +70,7 @@ class Inputinventory extends CI_Controller {
 		$array = json_decode($search,true);
 		$isnew = 0;
 		$login = $this->login;
+		$array['warehouseid'] = 0;
 		$arr = $this->model->saves($uniqueid,$itemList,$array,$isnew);
 		$result['status'] = $arr['uniqueid'];
 		$result['poid'] = $arr['poid'];
@@ -96,6 +97,7 @@ class Inputinventory extends CI_Controller {
 		$array = json_decode($search,true);
 		$isnew = 1;
 		$login = $this->login;
+		$array['warehouseid'] = 0;
 		$arr = $this->model->edits($uniqueid,$itemList,$array,$isnew);
 		$result['status'] = $arr['uniqueid'];
 		$result['poid'] = $arr['poid'];

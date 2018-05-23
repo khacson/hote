@@ -267,7 +267,7 @@ function searchBilling(){
 						</div>
 						<div class="details">
 						<div class="number" id="tongdoanhthu">0đ</div>
-						<div class="desc"> Doanh thu</div>
+						<div class="desc"> Doanh thu trong tháng</div>
 						</div>
 						<a class="more" href="#">
 						Xem chi tết
@@ -299,9 +299,9 @@ function searchBilling(){
 						</div>
 						<div class="details">
 						<div class="number" id="baogia"></div>
-						<div class="desc"> Báo giá</div>
+						<div class="desc"> Phòng đặt trước</div>
 						</div>
-						<a class="more" href="<?=base_url()?>supplier.html">
+						<a class="more" href="<?=base_url()?>room.html">
 						Xem chi tết
 						<i class="m-icon-swapright m-icon-white"></i>
 						</a>

@@ -19,7 +19,6 @@
 					<?php }?>
 					<option <?php if($finds->grouptype == 3){?>  selected <?php }?> value="3"><?=getLanguage('quan-ly');?></option>
 					<option <?php if($finds->grouptype == 4){?>  selected <?php }?> value="4"><?=getLanguage('nhan-vien');?></option>
-					<option <?php if($finds->grouptype == 5){?>  selected <?php }?> value="5"><?=getLanguage('nhan-vien-ban-hang');?></option>
 				</select>
 			</div>
 		</div>

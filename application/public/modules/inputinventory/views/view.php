@@ -95,7 +95,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-md-4">
+				<div class="col-md-4" style="display:none;">
 					<div class="form-group">
 						<label class="control-label col-md-4"><?=getLanguage('nhap-kho');?> (<span class="red">*</span>)</label>
 						<div class="col-md-8 ">
@@ -130,16 +130,6 @@
 						</div>
 					</div>
 				</div>
-			</div>
-			<div class="row mtop10">
-				<div class="col-md-4">
-					<div class="form-group">
-						<label  class="control-label col-md-3"><?=getLanguage('hang-hoa');?> </label>
-						<div class="col-md-9" style="">
-							<input type="text" name="goodsid" id="goodsid" placeholder="<?=getLanguage('nhap-ma-ten-hoac-scan');?>" class="search form-control tab-event" />
-						</div>
-					</div>
-				</div>
 				<div class="col-md-4">
 					<div class="form-group">
 						<label class="control-label col-md-4"><?=getLanguage('ngay-nhap');?></label>
@@ -151,6 +141,16 @@
 							<span class="input-group-btn ">
 								<button class="btn default btn-picker" type="button"><i class="fa fa-calendar "></i></button>
 							</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row mtop10">
+				<div class="col-md-4">
+					<div class="form-group">
+						<label  class="control-label col-md-3"><?=getLanguage('hang-hoa');?> </label>
+						<div class="col-md-9" style="">
+							<input type="text" name="goodsid" id="goodsid" placeholder="<?=getLanguage('nhap-ma-ten-hoac-scan');?>" class="search form-control tab-event" />
 						</div>
 					</div>
 				</div>
@@ -738,9 +738,9 @@
 		if(supplierid == ''){
 			warning("<?=getLanguage('chon-nha-cung-cap');?>"); return false;
 		}
-		if(warehouseid == ''){
+		/*if(warehouseid == ''){
 			warning("<?=getLanguage('chon-kho-nhap');?>"); return false;
-		}
+		}*/
 		var datecreate = $('#datecreate').val();
 		var description = $('#description').val();
 		var discount = $('#discount').val();
