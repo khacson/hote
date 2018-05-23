@@ -73,14 +73,14 @@ class Orderroom extends CI_Controller {
 		$query = $this->model->getRoomList($floorid, $roomtypeid,$isstatus);
 		$status = $query['status'];
 		$trinhtrangphong = array();
-		$trinhtrangphong['phongtrong'] = 0;
-		$trinhtrangphong['cokhach'] = 0;
-		$trinhtrangphong['chuadon'] = 0;
-		$trinhtrangphong['suachua'] = 0;
+		$trinhtrangphong['1'] = 0;
+		$trinhtrangphong['2'] = 0;
+		$trinhtrangphong['3'] = 0;
+		$trinhtrangphong['4'] = 0;
 		$arrFloor = array();
 		foreach($status as $item){
 			if($item->isstatus == 1){
-				$trinhtrangphong['phongtrong'] += $item->total;
+				$trinhtrangphong['1'] += $item->total;
 				if(isset($arrFloor[$item->floorid])){
 					$arrFloor[$item->floorid] += $item->total;
 				}
@@ -89,16 +89,19 @@ class Orderroom extends CI_Controller {
 				}
 			}
 			if($item->isstatus == 2){
-				$trinhtrangphong['cokhach'] += $item->total;
+				$trinhtrangphong['2'] += $item->total;
 			}
 			if($item->isstatus == 3){
-				$trinhtrangphong['chuadon'] += $item->total;
+				$trinhtrangphong['3'] += $item->total;
 			}
 			if($item->isstatus == 4){
-				$trinhtrangphong['suachua'] += $item->total;
+				$trinhtrangphong['4'] += $item->total;
 			}
 		} 
 		$data->roomLists = $query['datas'];
+		$data->trinhtrangphong = $trinhtrangphong;
+		$data->arrFloor = $arrFloor;
+		
 		$data->roomTotals = $this->model->getRoomType($floorid);
 		$result->content = $this->load->view('roomlist', $data, true);	
 		echo json_encode($result);
@@ -363,7 +366,7 @@ class Orderroom extends CI_Controller {
 		$permission = $this->base_model->getPermission($this->login, $this->route);
 		$array = json_decode($this->input->post('search'),true);
 		$itemList = $this->input->post('itemList');
-		$otherCus = $this->input->post('otherCus');
+		$otherCus = $this->input->post('otherCus'); 
 		$roomid = $this->input->post('roomid');
 		$id = $this->input->post('id');
 		if (!isset($permission['add'])){

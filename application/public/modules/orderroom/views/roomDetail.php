@@ -345,9 +345,11 @@
 		formatNumber('fm-number');
 		autocompleteSearchCMND();
 		autocompleteSearchName();
-		if(findService != '0' && findService != 0){
-			serviceOther();
-		}
+		/*if(findService != '0' && findService != 0){
+			
+		}*/
+		serviceOther();
+		customerOther();
 	});
 	function initForm(){
 		$('#input_lease').change(function(){
@@ -366,13 +368,13 @@
 			}
 		});
 		//autocompleteCustomerOther();
-		$('#tabserviceClick').click(function(){
+		/*$('#tabserviceClick').click(function(){
 			 serviceOther();
 		});
 		$('#tabcustomerClick').click(function(){
 			customerOther();
 			//autocompleteCustomerOther();
-		});
+		});*/
 	}
 	function serviceOther(){
 		var roomid = '<?=$finds->id;?>';
@@ -431,7 +433,7 @@
 				$('#input_identity_from').val(ui.item.identity_from);
 				$('#input_customer_address').val(ui.item.address);
 				$('#input_customer_comppany').val(ui.item.company_name);
-				$('#input_customer_mst').val(ui.item.address); 
+				$('#input_customer_mst').val(ui.item.company_mst); 
 			},
 			create: function(){
 				$(this).data('ui-autocomplete')._renderItem  = function (ul, item) {
@@ -480,7 +482,7 @@
 				$('#input_identity_from').val(ui.item.identity_from);
 				$('#input_customer_address').val(ui.item.address);
 				$('#input_customer_comppany').val(ui.item.company_name);
-				$('#input_customer_mst').val(ui.item.company_mst);
+				$('#input_customer_mst').val(ui.item.company_mst); 
 			},
 			create: function(){
 				$(this).data('ui-autocomplete')._renderItem  = function (ul, item) {
@@ -595,9 +597,9 @@
 			}
 		});
 		var customer = {};
-		customer['c1'] = objReq;
-		customer['c2'] = objReq2;
-		customer['c3'] = objReq3;
+		customer.c1 = objReq;
+		customer.c2 = objReq2;
+		customer.c3 = objReq3;
 		return JSON.stringify(customer);
 	}
 </script>

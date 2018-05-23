@@ -146,10 +146,10 @@
     	<div class="row">
             <div class="col-md-12 colm3 col6  branchids" >
                 <ul class="room_status">
-					<li class="clickloaitrong" id="1"><div class="room1"></div><?=getLanguage('phong-trong');?> (<b>10</b>)</li>
-					<li class="clickloaitrong" id="2"><div class="room2"></div><?=getLanguage('co-khach');?> (<b>10</b>)</li>
-					<li class="clickloaitrong" id="3"><div class="room3"></div><?=getLanguage('chua-don');?> (<b>10</b>)</li>
-					<li class="clickloaitrong" id="4"><div class="room4"></div><?=getLanguage('sua-chua');?> (<b>10</b>)</li>
+					<li class="clickloaitrong" id="1"><div class="room1"></div><?=getLanguage('phong-trong');?> (<b id="isstatus_1">0</b>)</li>
+					<li class="clickloaitrong" id="2"><div class="room2"></div><?=getLanguage('co-khach');?> (<b id="isstatus_2">0</b>)</li>
+					<li class="clickloaitrong" id="3"><div class="room3"></div><?=getLanguage('chua-don');?> (<b id="isstatus_3">0</b>)</li>
+					<li class="clickloaitrong" id="4"><div class="room4"></div><?=getLanguage('sua-chua');?> (<b id="isstatus_4">0</b>)</li>
 				</ul>
 	  		</div>
       </div>
@@ -168,8 +168,8 @@
 			}
 			?>
 			<div class="<?=$class;?> clicFloors" fid="<?=$item->id;?>">
-				<?=$item->floor_name;?>
-				<div class="row room_empty"><?=getLanguage('phong-trong');?> (2)</div>
+				<?=$item->floor_name;?> 
+				<div class="row room_empty"><?=getLanguage('phong-trong');?> (<b id="floors_<?=$item->id;?>">0</b>)</div>
 			</div>
 		<?php $i++;}?>
 		</div>

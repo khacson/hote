@@ -42,5 +42,11 @@
 		<?php foreach($roomTotals as $key => $val){?>
 			$('#roomTypes_<?=$key?>').html('('+<?=$val?>+')');
 		<?php }?>
+		<?php foreach($trinhtrangphong as $key => $val){?>
+			$('#isstatus_<?=$key;?>').html(<?=$val;?>);
+		<?php }?>
+		<?php foreach($arrFloor as $key => $val){?>
+			$('#floors_<?=$key;?>').html(<?=$val;?>);
+		<?php }?>
 	});
 </script>

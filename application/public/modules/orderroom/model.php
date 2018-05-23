@@ -90,11 +90,24 @@
 		";
 		$datas =  $this->model->query($sql)->execute();
 		//Phòng trống 
+		$ands = "";
+		if(!empty($floorid)){
+			$ands.= " and r.floorid = '$floorid'";
+		}
+		if(!empty($roomtypeid)){
+			$ands.= " and r.roomtypeid = '$roomtypeid'";
+		}
+		if(!empty($isstatus) && !empty($roomtypeid)){
+			$and.= " and r.isstatus = '$isstatus'";
+		}
+		if(!empty($login->branchid)){
+			$ands.= " and r.branchid = '".$login->branchid ."'";
+		}
 		$sql1 = "
 			SELECT r.floorid, r.isstatus, count(1) total
 			FROM hotel_room_6 r
 			where r.isdelete = 0
-			$and
+			$ands
 			group by r.floorid, r.isstatus
 			;
 		";
@@ -432,7 +445,7 @@
 		$arrRoomOder['isnew'] = 1;
 		$arrRoomOder['datecreate'] = $timeNow;
 		$arrRoomOder['usercreate'] =  $this->login->username;
-		$arrRoomOder['branchid'] =  $this->login->branchid;
+		$arrRoomOder['branchid'] =  $branchid;
 		$this->model->table($tb['hotel_orderroom'])->insert($arrRoomOder);
 		//Cập nhật tình trạng đặt phòng vào table đặt phòng => 2 = Phòng có khách
 		$this->model->table($tb['hotel_room'])
@@ -494,8 +507,17 @@
 			$customerid = $checkCustomer->id;
 		}
 		#end
+		#region lịch sử đặt phòng khách hàng
+		$arrHistory1 = array();
+		$arrHistory1['customerid'] = $customerid;
+		$arrHistory1['branchid'] = $branchid;
+		$arrHistory1['roomid'] = $roomid;
+		$arrHistory1['oderromid'] = $oderromid;
+		$arrHistory1['datecreate'] = $timeNow;
+		$this->model->table($tb['hotel_customer_history'])->insert($arrHistory1);
+		#end
 		#region khách hàng khách
-		$otherCusArray = json_encode($otherCus,true);  
+		$otherCusArray = json_decode($otherCus,true);
 		if(count($otherCusArray) > 0){
 			 //Khách hàng 1
 			 if(!empty($otherCusArray['c1']['customer_name1'])){
@@ -527,16 +549,31 @@
 								 ->where('identity',$arrC1['identity'])
 								 ->find();
 				 if(!empty($checkCustomer1->id)){
-					$this->model->table($tb['hotel_customer'])
-								->where('id',$checkCustomer1->id)
+					 $customerid1 = $checkCustomer1->id;
+					 $this->model->table($tb['hotel_customer'])
+								->where('id',$customerid1)
 								->update($arrC1);
+					
 				 }
 				 else{
 					//Thêm mới khách hàng
 					$arrC1['datecreate'] = $timeNow;
 					$arrC1['usercreate'] =  $this->login->username;
 					$this->model->table($tb['hotel_customer'])->insert($arrC1);
+					$checkCustomer1 = $this->model->table($tb['hotel_customer'])
+								 ->select('id')
+								 ->where('customer_name',$arrC1['customer_name'])
+								 ->where('identity',$arrC1['identity'])
+								 ->find();
+					$customerid1 = $checkCustomer1->id;
 				 }
+				 $arrHistory1 = array();
+				 $arrHistory1['customerid'] = $customerid1;
+				 $arrHistory1['branchid'] = $branchid;
+				 $arrHistory1['roomid'] = $roomid;
+				 $arrHistory1['oderromid'] = $oderromid;
+				 $arrHistory1['datecreate'] = $timeNow;
+				 $this->model->table($tb['hotel_customer_history'])->insert($arrHistory1);
 			 }
 			 //Khách hàng 2
 			 if(!empty($otherCusArray['c2']['customer_name2'])){
@@ -568,8 +605,9 @@
 								 ->where('identity',$arrC2['identity'])
 								 ->find();
 				 if(!empty($checkCustomer2->id)){
-					$this->model->table($tb['hotel_customer'])
-								->where('id',$checkCustomer2->id)
+					 $customerid2 = $checkCustomer2->id;
+					 $this->model->table($tb['hotel_customer'])
+								->where('id',$customerid2)
 								->update($arrC2);
 				 }
 				 else{
@@ -577,7 +615,20 @@
 					$arrC2['datecreate'] = $timeNow;
 					$arrC2['usercreate'] =  $this->login->username;
 					$this->model->table($tb['hotel_customer'])->insert($arrC2);
+					$checkCustomer2 = $this->model->table($tb['hotel_customer'])
+								 ->select('id')
+								 ->where('customer_name',$arrC2['customer_name'])
+								 ->where('identity',$arrC2['identity'])
+								 ->find();
+					$customerid2 = $checkCustomer2->id;
 				 }
+				 $arrHistory1 = array();
+				 $arrHistory1['customerid'] = $customerid2;
+				 $arrHistory1['branchid'] = $branchid;
+				 $arrHistory1['roomid'] = $roomid;
+				 $arrHistory1['oderromid'] = $oderromid;
+				 $arrHistory1['datecreate'] = $timeNow;
+				 $this->model->table($tb['hotel_customer_history'])->insert($arrHistory1);
 			 }
 			 //Khách hàng 3
 			 if(!empty($otherCusArray['c3']['customer_name3'])){
@@ -609,16 +660,31 @@
 								 ->where('identity',$arrC3['identity'])
 								 ->find();
 				 if(!empty($checkCustomer3->id)){
+					$customerid3 = $checkCustomer3->id;
 					$this->model->table($tb['hotel_customer'])
-								->where('id',$checkCustomer3->id)
+								->where('id',$customerid3)
 								->update($arrC3);
+					
 				 }
 				 else{
 					//Thêm mới khách hàng
 					$arrC3['datecreate'] = $timeNow;
 					$arrC3['usercreate'] =  $this->login->username;
 					$this->model->table($tb['hotel_customer'])->insert($arrC3);
+					$checkCustomer3 = $this->model->table($tb['hotel_customer'])
+								 ->select('id')
+								 ->where('customer_name',$arrC3['customer_name'])
+								 ->where('identity',$arrC3['identity'])
+								 ->find();
+					$customerid3 = $checkCustomer3->id;
 				 }
+				 $arrHistory1 = array();
+				 $arrHistory1['customerid'] = $customerid3;
+				 $arrHistory1['branchid'] = $branchid;
+				 $arrHistory1['roomid'] = $roomid;
+				 $arrHistory1['oderromid'] = $oderromid;
+				 $arrHistory1['datecreate'] = $timeNow;
+				 $this->model->table($tb['hotel_customer_history'])->insert($arrHistory1);
 			 }
 		}
 		#end
@@ -633,7 +699,9 @@
 			$insert['usercreate'] =  $this->login->username;
 			$insert['branchid'] =  $this->login->branchid;
 			$insert['uniqueid'] = $uniqueid;
+			$insert['datepo'] = fmDateSave($timeNow);
 			$insert['poid'] = $poid;
+			$insert['roomid'] = $roomid;
 			$insert['signature_x'] = $this->login->signature;
 			$insert['signature_name_x'] = $this->login->fullname;
 			$insert['warehouseid'] = 0;
