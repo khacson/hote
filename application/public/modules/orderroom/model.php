@@ -9,13 +9,26 @@
 		$this->login = $this->site->getSession('login');
 		$this->ctr = 101;
 	}
-	function findID($id) {
+	function findID($id){
 		$tb = $this->base_model->loadTable();
         $query = $this->model->table($tb['hotel_room'])
 					  ->where('isdelete',0)
 					  ->where('id',$id)
 					  ->find();
         return $query;
+    }
+	function findService($roomid){
+		$tb = $this->base_model->loadTable();
+        $query = $this->model->table($tb['hotel_add_temp'])
+					  ->select('id')
+					  ->where('roomid',$roomid)
+					  ->limit(1)
+					  ->find();
+		$find = 0;
+		if(!empty($query->id)){
+			$find = $query->id;
+		}
+        return $find;
     }
 	function getPriceList() {
 		$login = $this->login;
@@ -75,8 +88,21 @@
 				$and
 				order by r.room_name asc
 		";
-		$query =  $this->model->query($sql)->execute();
-		return $query;
+		$datas =  $this->model->query($sql)->execute();
+		//Phòng trống 
+		$sql1 = "
+			SELECT r.floorid, r.isstatus, count(1) total
+			FROM hotel_room_6 r
+			where r.isdelete = 0
+			$and
+			group by r.floorid, r.isstatus
+			;
+		";
+		$status =  $this->model->query($sql1)->execute();
+		$array = array();
+		$array['datas'] = $datas;
+		$array['status'] = $status;
+		return $array;
 	}
 	function checkPhone($phone){//Xóa khoảng trắng của số điện thoại
 		$arrPhone = explode(' ',$phone);
@@ -155,7 +181,7 @@
 				}
 				$arrAdd['roomid'] = $roomid;
 				$arrAdd['datecreate'] = gmdate("Y-m-d H:i:s", time() + 7 * 3600);
-				$arrAdd['unitid'] = $findgoods->unitid_active;
+				$arrAdd['unitid'] = $findgoods->unitid; //Mặc đinh là đơn vị nhỏ nhất
 				$this->model->table($tb['hotel_add_temp'])->insert($arrAdd);
 			}
 			else{//co roi update so luon
@@ -276,7 +302,12 @@
 		foreach($listID as $key=>$val){
 			$stringID.= ','.$key;
 		}
-		$stringID = substr($stringID,1);
+		if(!empty($stringID)){
+			$stringID = substr($stringID,1);
+		}
+		else{
+			$stringID = 0;
+		}
 		//
 		$tbTemp = $tb['hotel_add_temp'];
 		$tbGoods = $tb['hotel_goods'];
@@ -298,14 +329,14 @@
 									   ->select('id,quantity')
 									   ->where('branchid',$branchid)
 									   ->where('goodsid',$item->goodid)
-									   ->where('warehouseid',$array['warehouseid'])
+									   ->where('warehouseid',0)
 									   ->where('isdelete',0)
 									   ->find();
 				if(empty($checkInventory->id)){
 					//Them vao kho
 					$arrAddInventorey = array();
 					$arrAddInventorey['branchid'] = $branchid; 
-					$arrAddInventorey['warehouseid'] = $array['warehouseid'];
+					$arrAddInventorey['warehouseid'] = 0;
 					$arrAddInventorey['goodsid'] = $item->goodid;
 					$arrAddInventorey['quantity'] = 0;
 					$arrAddInventorey['shelflife'] = '0000-00-00';
@@ -313,7 +344,7 @@
 					$quantityStock = 0;
 				}
 				//Số lượng
-				$quantity = $item->quantity;
+				$quantity = $item->quantity; 
 				//S Tinh quy doi so luong
 				if($item->unitidNode != $item->unitid){
 					//Tinh quy doi
@@ -325,7 +356,7 @@
 					if(!empty($findUnit->conversion)){
 						$quantity = ($findUnit->conversion) *  ($item->quantity);
 					}
-				}
+				}   
 				//Số lương Tồn kho
 				if(!empty($checkInventory->quantity)){
 					$quantityStock = $checkInventory->quantity;
@@ -341,7 +372,7 @@
 			}
 			if($listError != ''){
 				$arr = array();
-				$arr['statusid'] = 0;
+				$arr['status'] = 0;
 				$arr['msg'] = ' Tồn kho không đủ: <br>'.$listError;
 				return $arr; exit;
 			}
@@ -368,12 +399,12 @@
 					SET `quantity`= `quantity` - ".$quantity." 
 					WHERE `goodsid`='".$goodid."'
 					AND `branchid` = '".$branchid."'
-					AND `warehouseid` = '".$array['warehouseid']."'
+					AND `warehouseid` = '0'
 					;
 				";
 				$this->model->executeQuery($sqlUpdate);
 			}
-		}
+		}  
 		#end
 		#region Check Phòng trống
 		$checkRoomid = $this->model->table($tb['hotel_orderroom'])
@@ -384,10 +415,10 @@
 								 ->find();
 		if(!empty($checkRoomid->id)){
 			$arr = array();
-			$arr['statusid'] = 0;
+			$arr['status'] = 0;
 			$arr['msg'] = ' Phòng đang có khách';
 			return $arr; exit;
-		}
+		} 
 		#end
 		#region Lưu dữ liệu đặt phòng
 		$arrRoomOder = array();
@@ -403,10 +434,10 @@
 		$arrRoomOder['usercreate'] =  $this->login->username;
 		$arrRoomOder['branchid'] =  $this->login->branchid;
 		$this->model->table($tb['hotel_orderroom'])->insert($arrRoomOder);
-		//Cập nhật tình trạng đặt phòng vào table đặt phòng
+		//Cập nhật tình trạng đặt phòng vào table đặt phòng => 2 = Phòng có khách
 		$this->model->table($tb['hotel_room'])
 					->where('id',$roomid)
-					->update(array('isstatus'=>1));
+					->update(array('isstatus'=>2));
 		$getOderRoom = $this->table($tb['hotel_orderroom'])
 							->select('id')->where('isnew',1)
 							->where('roomid',$roomid)
@@ -592,7 +623,7 @@
 		}
 		#end
 		#region Tạo phiếu xuất kho
-		$arrAuto = $this->createPoOrder($branchid,$array['datecreate']);
+		$arrAuto = $this->createPoOrder($branchid,$timeNow);
 		$poid = $arrAuto['poid'];
 		if(count($queryTemp) > 0){
 			$insert = array();
@@ -634,13 +665,87 @@
 			}
 		}
 		#end	
-		
+		#region xóa dữ liệu
+		if(!empty($stringID)){
+			$this->model->table($tbTemp)->where("id in ($stringID)")->where("roomid",$roomid)->delete();
+		}
+		#end
 		$this->db->trans_complete();
 		$arr = array();
 		
-		$arr['status'] = '';
+		$arr['status'] = 1;
 		$arr['msg'] = '';
 		return $arr;
+	}
+	function updatePriceOne($goodid,$priceone,$quantity,$discount,$xkm,$isnew,$unitid){
+		$userid =  $this->login->id;
+		$tb = $this->base_model->loadTable();
+		$array = array();
+		$pos = strpos($discount,'%');
+		if ($pos !== false) {
+			$discount_types = 2;
+		} else {
+			$discount_types = 1;
+		}
+		$array['discount'] = $discount;
+		$discount = fmNumberSave(str_replace('%','',$discount));
+		if(empty($discount)){
+			$discount = 0;
+		}
+		$priceone = fmNumberSave($priceone);
+		if(empty($priceone)){
+			$priceone = 0;
+		}
+		$quantity = fmNumberSave($quantity);
+		if(empty($quantity)){
+			$quantity = 0;
+		}
+		$vat = 0;
+		$xkm = fmNumberSave($xkm);
+		if(empty($xkm)){
+			$xkm = 0;
+		}
+		
+		$array['price'] = $priceone;
+		$array['quantity'] = $quantity;
+		$array['unitid'] = $unitid;
+		$array['vat'] = $vat;
+		
+		$totalEnd = $quantity - $xkm;
+		$priceEnd = $totalEnd * $priceone;
+		$giamGia = $discount;
+		if($discount_types == 2){
+			$giamGia = ($discount * $priceEnd) / 100;
+		}
+		$priceEnds = $priceEnd - $giamGia;
+		$totalVat = ($vat * $priceEnds) /100;
+		
+				
+		$array['discount_type'] = $discount_types;
+		$array['discount_value'] = $discount;
+		$array['xkm'] = $xkm;
+		$array['price_total'] = fmNumberSave($priceEnds + $totalVat);
+		
+		
+		$this->model->table($tb['hotel_add_temp'])
+						  ->where('contronller',$this->ctr)
+						  ->where('userid',$userid)
+						  ->where('goodid',$goodid)
+						  ->where('isnew',$isnew)
+						  ->update($array);
+						  
+		return $this->getNewPrice($isnew);
+	}
+	function getNewPrice($isnew){
+		$tb = $this->base_model->loadTable();
+		$userid =  $this->login->id;
+		$query =  $this->model->table($tb['hotel_add_temp'])
+						  ->select('sum(quantity * price) as price, sum(discount_value) as discount')
+						  ->where('contronller',$this->ctr)
+						  ->where('userid',$userid)
+						  ->where('isnew',$isnew)
+						  ->find();
+		return $query;
 	}
 	function createPoOrder($branchid,$datecreate){
 		$tb = $this->base_model->loadTable();

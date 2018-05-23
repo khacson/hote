@@ -70,7 +70,35 @@ class Orderroom extends CI_Controller {
 		$isstatus = $this->input->post('isstatus');
 		
 		$data->timenow =  gmdate("d/m/Y H:i", time() + 7 * 3600); 
-		$data->roomLists = $this->model->getRoomList($floorid, $roomtypeid,$isstatus);
+		$query = $this->model->getRoomList($floorid, $roomtypeid,$isstatus);
+		$status = $query['status'];
+		$trinhtrangphong = array();
+		$trinhtrangphong['phongtrong'] = 0;
+		$trinhtrangphong['cokhach'] = 0;
+		$trinhtrangphong['chuadon'] = 0;
+		$trinhtrangphong['suachua'] = 0;
+		$arrFloor = array();
+		foreach($status as $item){
+			if($item->isstatus == 1){
+				$trinhtrangphong['phongtrong'] += $item->total;
+				if(isset($arrFloor[$item->floorid])){
+					$arrFloor[$item->floorid] += $item->total;
+				}
+				else{
+					$arrFloor[$item->floorid] = $item->total;
+				}
+			}
+			if($item->isstatus == 2){
+				$trinhtrangphong['cokhach'] += $item->total;
+			}
+			if($item->isstatus == 3){
+				$trinhtrangphong['chuadon'] += $item->total;
+			}
+			if($item->isstatus == 4){
+				$trinhtrangphong['suachua'] += $item->total;
+			}
+		} 
+		$data->roomLists = $query['datas'];
 		$data->roomTotals = $this->model->getRoomType($floorid);
 		$result->content = $this->load->view('roomlist', $data, true);	
 		echo json_encode($result);
@@ -85,6 +113,8 @@ class Orderroom extends CI_Controller {
 		$finds = $this->model->findID($roomid);
 		$data->hours = gmdate("H", time() + 7 * 3600); 
 		$data->minute = gmdate("i", time() + 7 * 3600); 
+		
+		$data->findService = $this->model->findService($roomid);
 		
 		$data->fromdate = date(cfdate(),strtotime(gmdate("Y-m-d", time() + 7 * 3600)));
 		$data->todate = date(cfdate(),strtotime(gmdate("Y-m-d", time() + 7 * 3600)));
@@ -312,6 +342,23 @@ class Orderroom extends CI_Controller {
 		$detailid = $this->input->post('detailid');
 		$this->model->deleteTempData($detailid);
 	}
+	function tabcustomerLoad(){
+		$result =  new stdClass();	
+		$data = new stdClass();	
+		$roomid = $this->input->post('roomid');
+		//$data->datas = $this->model->getTempGood($userid,$isnew,$roomid);
+		$result->content = $this->load->view('customerOther', $data, true);
+		echo json_encode($result);
+	}
+	function tabserviceLoad(){
+		$result =  new stdClass();	
+		$data = new stdClass();	
+		$roomid = $this->input->post('roomid');
+		$data->roomid = $roomid;
+		//$data->datas = $this->model->getTempGood($userid,$isnew,$roomid);
+		$result->content = $this->load->view('service', $data, true);
+		echo json_encode($result);
+	}
 	function save(){
 		$permission = $this->base_model->getPermission($this->login, $this->route);
 		$array = json_decode($this->input->post('search'),true);
@@ -329,5 +376,29 @@ class Orderroom extends CI_Controller {
 		$result['msg'] = $arr['msg'];
 		echo json_encode($result);
 		exit;
+	}
+	function updatePriceOne(){
+		$goodid = $this->input->post('goodid');
+		$quantity = $this->input->post('quantity');
+		$priceone = $this->input->post('priceone');
+		$discount = $this->input->post('discount');
+		$xkm = $this->input->post('xkm');
+		$isnew = $this->input->post('isnew');
+		$unitid = $this->input->post('unitid');
+		$data = $this->model->updatePriceOne($goodid,$priceone,$quantity,$discount,$xkm,$isnew,$unitid);
+		$result = new stdClass();
+		$result->price = fmNumber($data->price);
+		$result->discount = fmNumber($data->discount);
+		$result->priceEnd = fmNumber($data->price - $data->discount);		
+		echo json_encode($result); exit;
+	}
+	function getNewPrice(){
+		$isnew = $this->input->post('isnew');
+		$data = $this->model->getNewPrice($isnew);
+		$result = new stdClass();
+		$result->price = fmNumber($data->price);
+		$result->discount = fmNumber($data->discount);
+		$result->priceEnd = fmNumber($data->price - $data->discount);		
+		echo json_encode($result); exit;
 	}
 }

@@ -131,12 +131,5 @@ $i++;
 	<td></td>
 </tr>
 <script>
-	function getTemIDs(){
-		var objReq = {};
-		$(".satids").each(function(i){
-			var val = $(this).val(); 
-			objReq[val] = val;
-		});
-		return JSON.stringify(objReq);
-	}
+	
 </script>
