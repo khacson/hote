@@ -12,9 +12,8 @@ class Department extends CI_Controller {
 	var $login;
     function __construct() {
         parent::__construct();
-        $this->load->model(array('login_model','base_model'));
-        $this->phonedetail = 'hre_processdetail';
-		$this->login = $this->site->getSession('glogin');
+        $this->load->model(array('base_model'));
+        $this->login = $this->site->getSession('login');
 		$this->route = $this->router->class;
 		$this->load->library('upload');
     }
@@ -28,7 +27,7 @@ class Department extends CI_Controller {
     function _view() {
 		$data = new stdClass();
         $login = $this->login;
-        if (!isset($login['id'])){
+        if (!isset($login->id)){
 			redirect(base_url());
 		}
 		$permission = $this->base_model->getPermission($this->login, $this->route);
@@ -37,7 +36,7 @@ class Department extends CI_Controller {
         }
 		$data->permission = $permission;
         $data->routes = $this->route; 
-        $data->groupid = $login['groupid'];
+        $data->groupid = $login->groupid;
 		#gegion add log
 		$ctrol = getLanguage('phong-ban');
 		$func =  getLanguage('xem');
@@ -53,7 +52,7 @@ class Department extends CI_Controller {
 		$find = $this->model->findID($id);
 		$tb = $this->base_model->loadTable();
 		if(empty($find->id)){
-			$find = $this->base_model->getColumns($tb['hre_department']);
+			$find = $this->base_model->getColumns($tb['hotel_department']);
 		}
 		$data = new stdClass();
         $result = new stdClass();
@@ -64,7 +63,7 @@ class Department extends CI_Controller {
 		else{
 			$result->title = getLanguage('sua');
 		}
-		$data->branchid = $login['branchid'];
+		$data->branchid = $login->branchid;
         $result->content = $this->load->view('form', $data, true);
 		$result->id = $id;
         echo json_encode($result);
@@ -119,18 +118,10 @@ class Department extends CI_Controller {
             exit;
         }
         $array = json_decode($this->input->post('search'), true);
-		if(isset($_FILES['avatarfile']) && $_FILES['avatarfile']['name'] != "") {
-			$imge_name = $_FILES['avatarfile']['name'];
-			$this->upload->initialize($this->set_upload_options());
-			$image_data = $this->upload->do_upload('avatarfile', $imge_name); //Ten hinh 
-			$array['image']  = $image_data;
-			$resize = $this->resizeImg($image_data);	
-		}
         $login = $this->login;
         $array['datecreate'] = gmdate("Y-m-d H:i:s", time() + 7 * 3600);
-        $array['usercreate'] = $login['userlogin'];
-        //$array['ipcreate'] = $this->base_model->getMacAddress();
-		
+        $array['usercreate'] = $login->username;
+
         $result['status'] = $this->model->saves($array,$id);
 		#region logfile
 		$ctrol = getLanguage('phong-ban');
@@ -155,16 +146,9 @@ class Department extends CI_Controller {
             exit;
         }
         $array = json_decode($this->input->post('search'), true);
-		if(isset($_FILES['avatarfile']) && $_FILES['avatarfile']['name'] != "") {
-			$imge_name = $_FILES['avatarfile']['name'];
-			$this->upload->initialize($this->set_upload_options());
-			$image_data = $this->upload->do_upload('avatarfile', $imge_name); //Ten hinh 
-			$array['image']  = $image_data;
-			$resize = $this->resizeImg($image_data);	
-		}
         $login = $this->login;
         $array['dateupdate'] = gmdate("Y-m-d H:i:s", time() + 7 * 3600);
-        $array['userupdate'] = $login['userlogin'];
+        $array['userupdate'] = $login->username;
 		$findID = $this->model->findID($id);
         $result['status'] = $this->model->edits($array,$id);
 		$findIDEnd = $this->model->findID($id);
@@ -192,7 +176,7 @@ class Department extends CI_Controller {
 		$findID = $this->model->findID($id);
         $login = $this->login;
         $array['dateupdate'] = gmdate("Y-m-d H:i:s", time() + 7 * 3600);
-        $array['userupdate'] = $login['userlogin'];
+        $array['userupdate'] = $login->username;
         $array['isdelete'] = 1;
         $this->model->deletes($id,$array);
         $result['status'] = 1;

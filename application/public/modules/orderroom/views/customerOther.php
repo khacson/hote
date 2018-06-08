@@ -61,6 +61,52 @@
 			</div>
 		 </div>
 		 <!--E Row-->
+		<div class="row mtop10">
+			<!--S Camera-->
+			<div id="QR-Code" class="container" style="width:100%">
+					<div class="panel panel-primary">
+						<div class="panel-heading" style="display: inline-block;width: 100%;">
+							<h4 style="width:50%;float:left;">Chụp hình</h4>
+							<div style="width:50%;float:right;margin-top: 5px;margin-bottom: 5px;text-align: right;">
+							<!--<select id="cameraId" class="form-control" style="display: inline-block;width: auto;"></select>-->
+							<button id="savec1" data-toggle="tooltip" title="Image shoot" type="button" class="btn btn-info btn-sm disabled"><span class="glyphicon glyphicon-picture"></span></button>
+							<button id="savec11" data-toggle="tooltip" title="Image shoot" type="button" class="btn btn-info btn-sm disabled"><span class="glyphicon glyphicon-picture"></span></button>
+						</div>
+					</div>
+					<div class="panel-body">
+						<div class="col-md-4" style="text-align: center;">
+							<div class="well" style="position: relative;display: inline-block;">
+								<canvas class="qr-canvas-c1"  width="210" height="150"></canvas>
+								<div class="scanner-laser laser-rightBottom" style="opacity: 0.5;"></div>
+								<div class="scanner-laser laser-rightTop" style="opacity: 0.5;"></div>
+								<div class="scanner-laser laser-leftBottom" style="opacity: 0.5;"></div>
+								<div class="scanner-laser laser-leftTop" style="opacity: 0.5;"></div>
+							</div>
+						   
+						</div>
+						<div class="col-md-4" style="text-align: center;">
+							<div class="well" style="position: relative;display: inline-block;">
+								<img id="scanned-img-c1" src=""  width="210" height="150">
+							</div>
+							<!--<div class="caption">
+								<p id="scanned-QR"></p>
+							</div>-->
+						</div>
+						 <div class="col-md-4" style="text-align: center;">
+							<div class="well" style="position: relative;display: inline-block;">
+								<img id="scanned-img-c11" src="" width="210" height="150">
+							</div>
+							<!--<div class="caption">
+								<p id="scanned-QR"></p>
+							</div>-->
+						</div>
+					</div>
+					<div class="panel-footer">
+					</div>
+				</div>
+			</div>
+		<!--E Camera-->
+		</div> 
 </fieldset>
 <fieldset class="mtop10"><!--Khach hang 3-->
 	<legend class="f16" style="color:#0090d9;"><?=getLanguage('khach-hang');?> 2</legend>

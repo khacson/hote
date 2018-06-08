@@ -8,35 +8,76 @@
 		parent::__construct('');
 		$this->login = $this->site->getSession('login');
 	}
-	function findID($id){
+	function findID($oderromid){
 		$tb = $this->base_model->loadTable(); 
-		$query = $this->model->table($tb['hotel_roomtype'])
-					  ->select('*')
-					  ->where('id',$id)
-					  ->find();
+		$sql = "
+			SELECT c.* 
+			FROM `".$tb['hotel_customer_history']."` ch
+			left join `".$tb['hotel_customer']."` c on c.id = ch.customerid
+			where ch.oderromid = '$oderromid'
+			;
+		";
+		$query = $this->model->query($sql)->execute();
 		return $query;
-	 }
+	}
+	function getPriceType(){
+		$login = $this->login;
+		$tb = $this->base_model->loadTable();
+        $query = $this->model->table($tb['hotel_roomprice'])
+					  ->select('id,roomprice_name')
+					  ->where('branchid',$login->branchid)
+					  ->find_combo('id','roomprice_name');
+		$query['0'] = getLanguage('gia-chuan');
+		$query['-1'] = getLanguage('thuong-luong');
+        return $query;
+	}
+	function getPriceList() {
+		$login = $this->login;
+		$tb = $this->base_model->loadTable();
+        $query = $this->model->table($tb['hotel_roomprice'])
+					  ->select('id,roomprice_name')
+					  ->where('isdelete',0)
+					  ->where('branchid',$login->branchid)
+					  ->order_by('roomprice_name')
+					  ->find_all();
+        return $query;
+    }
 	function getSearch($search){
 		$sql = "";
 		$branchid = $this->login->branchid;
-		if(!empty($search['roomtype_name'])){
-			$sql.= " and rt.roomtype_name  like '%".addslashes($search['roomtype_name'])."%' ";	
+		if(!empty($search['room_name'])){
+			$sql.= " and r.room_name  like '%".($search['room_name'])."%' ";	
+		}
+		if(!empty($search['roomtypeid'])){
+			$sql.= " and rt.id  in (".$search['roomtypeid'].") ";	
+		}
+		if(!empty($search['formdate'])){
+			$sql.= " and odh.datecreate >= '".fmDateSave($search['formdate'])." 00:00:00' ";	
+		}
+		if(!empty($search['todate'])){
+			$sql.= " and odh.datecreate <= '".fmDateSave($search['todate'])." 23:59:00' ";	
 		}
 		if(!empty($search['description'])){
-			$sql.= " and rt.description  like '%".addslashes($search['description'])."%' ";	
+			$sql.= " and odh.description  like '%".($search['description'])."%' ";	
 		}
-		if(!empty($search['count_beds'])){
-			$sql.= " and rt.count_beds  like '%".addslashes($search['count_beds'])."%' ";	
+		if(!empty($search['price'])){
+			$sql.= " and odh.price  like '%".($search['price'])."%' ";	
 		}
-		if(!empty($search['count_person'])){
-			$sql.= " and rt.count_person  like '%".addslashes($search['count_person'])."%' ";	
+		if(!empty($search['customer_phone'])){
+			$sql.= " and odh.customer_phone  like '%".($search['customer_phone'])."%' ";	
+		}
+		if(!empty($search['customer_name'])){
+			$sql.= " and odh.customer_name  like '%".($search['customer_name'])."%' ";	
+		}
+		if(!empty($search['customer_phone'])){
+			$sql.= " and odh.customer_phone  like '%".($search['customer_phone'])."%' ";	
 		}
 		if(!empty($branchid)){
-			$sql.= " and rt.branchid  = '".$branchid."' ";	
+			$sql.= " and odh.branchid  = '".$branchid."' ";	
 		}
 		else{
 			if(!empty($search['branchid'])){
-				$sql.= " and rt.branchid  in (".$search['branchid'].") ";	
+				$sql.= " and odh.branchid  in (".$search['branchid'].") ";	
 			}
 		}
 		return $sql;
@@ -44,14 +85,22 @@
 	function getList($search,$page,$rows){
 		$tb = $this->base_model->loadTable();
 		$searchs = $this->getSearch($search);
-		$sql = "SELECT rt.id, rt.roomtype_name,  rt.description, br.branch_name, rt.count_beds ,rt.count_person
-				FROM `".$tb['hotel_roomtype']."` AS rt
-				LEFT JOIN `".$tb['hotel_branch']."` br on br.id = rt.branchid
-				WHERE rt.isdelete = 0 
+		$sql = "
+				select odh.*, r.room_name, rt.roomtype_name,
+				(
+					select count(1) t
+					from `".$tb['hotel_customer_history']."` ch
+					where ch.oderromid = odh.id
+				) total, br.branch_name
+				from `".$tb['hotel_orderroom']."` odh
+				left join `".$tb['hotel_room']."`  r on r.id = odh.roomid
+				left join `".$tb['hotel_roomtype']."` rt on rt.id = r.roomtypeid
+				LEFT JOIN `".$tb['hotel_branch']."` br on br.id = odh.branchid
+				where odh.isdelete = 0
 				$searchs
 				";
 		if(empty($search['order'])){
-			$sql.= ' ORDER BY rt.roomtype_name asc ';
+			$sql.= ' ORDER BY odh.datecreate desc ';
 		}
 		else{
 			$sql.= ' ORDER BY '.$search['order'].' '.$search['index'].' ';
@@ -63,12 +112,14 @@
 	function getTotal($search){
 		$tb = $this->base_model->loadTable();
 		$searchs = $this->getSearch($search);
-		$sql = " 
-		SELECT count(1) total
-		FROM `".$tb['hotel_roomtype']."` AS rt
-		WHERE rt.isdelete = 0 
-		$searchs	
-		";
+		$sql = "
+				select count(1) total
+				from `".$tb['hotel_orderroom']."` odh
+				left join `".$tb['hotel_room']."`  r on r.id = odh.roomid
+				left join `".$tb['hotel_roomtype']."` rt on rt.id = r.roomtypeid
+				where odh.isdelete = 0
+				$searchs
+				";
 		$query = $this->model->query($sql)->execute();
 		return $query[0]->total;	
 	}

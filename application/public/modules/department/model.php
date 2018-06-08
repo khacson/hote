@@ -10,7 +10,7 @@ class DepartmentModel extends CI_Model
 	}
 	function findID($id) {
 		$tb = $this->base_model->loadTable();
-        $query = $this->model->table($tb['hre_department'])
+        $query = $this->model->table($tb['hotel_department'])
 					  ->where('isdelete',0)
 					  ->where('id',$id)
 					  ->find();
@@ -36,7 +36,7 @@ class DepartmentModel extends CI_Model
 		$tb = $this->base_model->loadTable();
 		$searchs = $this->getSearch($search);
 		$sql = " SELECT d.*
-				FROM `".$tb['hre_department']."` AS d
+				FROM `".$tb['hotel_department']."` AS d
 				WHERE d.isdelete = 0 
 				$searchs
 				
@@ -56,7 +56,7 @@ class DepartmentModel extends CI_Model
 		$searchs = $this->getSearch($search);
 		$sql = " 
 		SELECT count(1) total  
-			FROM `".$tb['hre_department']."` AS d
+			FROM `".$tb['hotel_department']."` AS d
 			WHERE d.isdelete = 0
 			$searchs	
 		";
@@ -65,7 +65,7 @@ class DepartmentModel extends CI_Model
 	}
 	function saves($array,$id){
 		$tb = $this->base_model->loadTable();
-		$check = $this->model->table($tb['hre_department'])
+		$check = $this->model->table($tb['hotel_department'])
 					  ->select('id')
 					  ->where('isdelete',0)
 					  ->where('departmanet_name',$array['departmanet_name'])
@@ -73,12 +73,12 @@ class DepartmentModel extends CI_Model
 		 if(!empty($check->id)){
 			return -1;	
 		 }
-		 $result = $this->model->table('hre_department')->insert($array);	
+		 $result = $this->model->table('hotel_department')->insert($array);	
 		 return $result;
 	}
 	function edits($array,$id){
 		$tb = $this->base_model->loadTable();
-		$check = $this->model->table($tb['hre_department'])
+		$check = $this->model->table($tb['hotel_department'])
 				  ->select('id')
 				  ->where('isdelete',0)
 				  ->where('departmanet_name',$array['departmanet_name'])
@@ -87,7 +87,7 @@ class DepartmentModel extends CI_Model
 		if(!empty($check->id)){
 			return -1;	
 		}
-		$this->model->table($tb['hre_department'])
+		$this->model->table($tb['hotel_department'])
 					->where('id',$id)
 					->update($array);	
 		return $id;
@@ -95,7 +95,7 @@ class DepartmentModel extends CI_Model
 	}
 	function deletes($id,$array){
 		$tb = $this->base_model->loadTable();
-		$this->model->table($tb['hre_department'])
+		$this->model->table($tb['hotel_department'])
 					->where("id in ($id)")
 					->update($array);
 		return 1;

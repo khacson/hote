@@ -3,9 +3,14 @@
   <li id="tabserviceClick" class="showsave"><a data-toggle="tab" href="#tabservice"><?=getLanguage('dich-vu');?></a></li>
   <li id="tabcustomerClick" class="showsave"><a data-toggle="tab" href="#tabcustomer"><?=getLanguage('them-khach-hang');?></a></li>
   <li id="tabhistoryClick" class="showsave"><a data-toggle="tab" href="#tabhistory"><?=getLanguage('lich-dat-phong');?></a></li>
+  
   <li style="float:right;">
 	 <button type="button" style="margin-top:10px;" class="close" data-dismiss="modal">&times;</button>
   </li>
+  <li style="padding-top:5px; float:right; margin-right:20px;">
+		<button id="play" data-toggle="tooltip" title="Play" type="button" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-play"></span></button>
+		<button id="stopAll" data-toggle="tooltip" title="Stop streams" type="button" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-stop"></span></button>
+  </div>
 </ul>
 <div class="tab-content">
     <div id="tabhome" class="tab-pane fade in active">
@@ -218,7 +223,6 @@
 		 <!--E Row-->
 		 <!--E Row-->
 		 <div class="row mtop10">
-			
 			<div class="col-md-6">
 				<div class="form-group">
 					<label class="control-label col-md-4"><?=getLanguage('ghi-chu');?></label>
@@ -227,6 +231,57 @@
 					</div>
 				</div>
 			</div>
+		</div>
+		 <!--E Row-->
+		<div class="row mtop10">
+			<!--S Camera-->
+			<div id="QR-Code" class="container" style="width:100%">
+					<div class="panel panel-primary">
+						<div class="panel-heading" style="display: inline-block;width: 100%; padding:2px 10px;">
+							<h4 style="width:50%;float:left;">Chụp hình</h4>
+							<div style="width:50%;float:right;margin-top: 5px;margin-bottom: 5px;text-align: right;">
+							<!--<select id="cameraId" class="form-control" style="display: inline-block;width: auto;"></select>-->
+							<button id="save" data-toggle="tooltip" title="Image shoot" type="button" class="btn btn-info btn-sm disabled"><span class="glyphicon glyphicon-picture"></span></button>
+							<button id="save2" data-toggle="tooltip" title="Image shoot" type="button" class="btn btn-info btn-sm disabled"><span class="glyphicon glyphicon-picture"></span></button>
+							
+						</div>
+					</div>
+					<div class="panel-body">
+						<div class="col-md-4" style="text-align: center;">
+							<div class="well" style="position: relative;display: inline-block;">
+								<canvas id="qr-canvas"  width="210" height="150"></canvas>
+								<div class="scanner-laser laser-rightBottom" style="opacity: 0.5;"></div>
+								<div class="scanner-laser laser-rightTop" style="opacity: 0.5;"></div>
+								<div class="scanner-laser laser-leftBottom" style="opacity: 0.5;"></div>
+								<div class="scanner-laser laser-leftTop" style="opacity: 0.5;"></div>
+							</div>
+						   
+						</div>
+						<div class="col-md-4" style="text-align: center;">
+							<div class="well" style="position: relative;display: inline-block;">
+								<img id="scanned-img" src=""  width="210" height="150">
+							</div>
+							<!--<div class="caption">
+								<p id="scanned-QR"></p>
+							</div>-->
+						</div>
+						 <div class="col-md-4" style="text-align: center;">
+							<div class="well" style="position: relative;display: inline-block;">
+								<img id="scanned-img-2" src="" width="210" height="150">
+							</div>
+							<!--<div class="caption">
+								<p id="scanned-QR"></p>
+							</div>-->
+						</div>
+					</div>
+					<div class="panel-footer">
+					</div>
+				</div>
+			</div>
+		<!--E Camera-->
+		</div>
+		<div class="row mtop10">
+			
 		</div>
 	</div>
 	<!--E Home-->
@@ -260,6 +315,39 @@
 </div>
 <input type="hidden" name="roomid" id="roomid" value="<?=$finds->id;?>"/>
 <style>
+	.scanner-laser{
+		position: absolute;
+		margin: 20px;
+		height: 30px;
+		width: 30px;
+	}
+	.laser-leftTop{
+		top: 0;
+		left: 0;
+		border-top: solid red 5px;
+		border-left: solid red 5px;
+	}
+	.well{
+		padding:10px !important;
+	}
+	.laser-leftBottom{
+		bottom: 0;
+		left: 0;
+		border-bottom: solid red 5px;
+		border-left: solid red 5px;
+	}
+	.laser-rightTop{
+		top: 0;
+		right: 0;
+		border-top: solid red 5px;
+		border-right: solid red 5px;
+	}
+	.laser-rightBottom{
+		bottom: 0;
+		right: 0;
+		border-bottom: solid red 5px;
+		border-right: solid red 5px;
+	}
 	.datepicker-dropdown{
 		width:250px !important;
 	}
@@ -337,6 +425,7 @@
 	var temp_stype = 0;
 	var temp_exchangs = 0;
 	var findService = '<?=$findService;?>';
+	var vbeep = '<?=url_tmpl();?>scan/js/beep.mp3';
 	$(function(){
 		handleSelect2();
 		initForm();
@@ -603,3 +692,6 @@
 		return JSON.stringify(customer);
 	}
 </script>
+<script type="text/javascript" src="<?=url_tmpl();?>scan/js/qrcodelib.js"></script>
+<script type="text/javascript" src="<?=url_tmpl();?>scan/js/WebCodeCam.js"></script>
+<script type="text/javascript" src="<?=url_tmpl();?>scan/js/main.js"></script>

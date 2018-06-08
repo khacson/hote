@@ -14,12 +14,12 @@ foreach ($datas as $item){
 		<td class="heads"><?=$item->heads;?></td>
 		<td class="text-center">
 			<?php if(isset($permission['edit'])){?>
-				<a id="<?=$id;?>" class="btn btn-info edititem" href="#" data-toggle="modal" data-target="#myModalFrom">
+				<a id="<?=$id;?>" class="btn btn-info edititem btn-icon2" href="#" data-toggle="modal" data-target="#myModalFrom">
 				<i class="fa fa-pencil" aria-hidden="true"></i>
 				</a>
 			<?php }?>
 			<?php if(isset($permission['delete'])){?>
-				<a id="<?=$id;?>" class="btn btn-danger deleteitem mleft10" href="#" data-toggle="modal" data-target="#myModal">
+				<a id="<?=$id;?>" class="btn btn-danger deleteitem btn-icon2" href="#" data-toggle="modal" data-target="#myModal">
 				<i class="fa fa-times" aria-hidden="true"></i>
 				</a>
 			<?php }?>

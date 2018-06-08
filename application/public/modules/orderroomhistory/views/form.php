@@ -1,51 +1,31 @@
-<div class="row">
-	<div class="col-md-12">
-		<div class="form-group">
-			<label class="control-label col-md-4"><?=getLanguage('loai-phong');?> (<span class="red">*</span>)</label>
-			<div class="col-md-8">
-				<input type="text" name="input_roomtype_name"  id="input_roomtype_name" class="form-input form-control tab-event" 
-				value="<?=$finds->roomtype_name;?>" placeholder=""
-				/>
-			</div>
-		</div>
-	</div>
-	<div class="col-md-12 mtop10">
-		<div class="form-group">
-			<label class="control-label col-md-4"><?=getLanguage('so-giuong');?></label>
-			<div class="col-md-8">
-				<input type="text" name="input_count_beds"  id="input_count_beds" class="form-input form-control tab-event" 
-				value="<?=$finds->count_beds;?>" placeholder=""
-				/>
-			</div>
-		</div>
-	</div>
-	<div class="col-md-12 mtop10">
-		<div class="form-group">
-			<label class="control-label col-md-4"><?=getLanguage('so-nguoi');?></label>
-			<div class="col-md-8">
-				<input type="text" name="input_count_person"  id="input_count_person" class="form-input form-control tab-event" 
-				value="<?=$finds->count_person;?>" placeholder=""
-				/>
-			</div>
-		</div>
-	</div>
-	<div class="col-md-12 mtop10">
-		<div class="form-group">
-			<label class="control-label col-md-4"><?=getLanguage('ghi-chu');?></label>
-			<div class="col-md-8">
-				<input type="text" name="input_description"  id="input_description" class="form-input form-control tab-event" 
-				value="<?=$finds->description;?>" placeholder=""
-				/>
-			</div>
-		</div>
-	</div>
+<div class="row"> 	
+	<table style="margin-top:-10px;" id="tbheader" width="100%" cellspacing="0" border="1" >
+		<tr>							
+			<th style="width:40px;"><?=getLanguage('stt')?></th>
+			<th style="width:130px;"><?=getLanguage('ho-ten')?></th>
+			<th style="width:100px;"><?=getLanguage('cmnd')?></th>
+			<th style="width:100px;"><?=getLanguage('ngay-cap')?></th>
+			<th style="width:100px;"><?=getLanguage('noi-cap')?></th>
+			<th style="width:100px;"><?=getLanguage('dien-thoai')?></th>
+			<th ><?=getLanguage('dia-chi')?></th>
+		</tr>
+		<?php $i=1; foreach($datas as $item){
+			if($item->identity_date != '0000-00-00' && !empty($item->identity_date)){
+				$identity_date = date(cfdate(),strtotime($item->identity_date));
+			}
+			else{
+				$identity_date = '';
+			}
+			?>
+		<tr>
+			<td style="text-align: center;"><?=$i;?></td>
+			<td class="customer_name"><?=$item->customer_name;?></td>
+			<td><?=$item->identity;?></td>
+			<td><?=$identity_date;?></td>
+			<td><?=$item->identity_from;?></td>
+			<td><?=$item->phone;?></td>
+			<td><?=$item->address;?></td>
+		</tr>
+		<?php $i++;}?>
+	</table>					
 </div>
-<script>
-	$(function(){
-		handleSelect2();
-		initForm();
-	});
-	function initForm(){
-		$('#input_roomtype_name').select();
-	}
-</script>

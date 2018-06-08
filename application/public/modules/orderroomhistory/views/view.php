@@ -3,17 +3,19 @@
 	table col.c2 { width: 50px; }
 	table col.c3 { width: 100px;}
 	table col.c4 { width: 130px;}
-	table col.c5 { width: 140px;}
-	table col.c6 { width: 140px;}
-	table col.c7 { width: 130px;}
-	table col.c8 { width: 100px;}
-	table col.c9 { width: 80px; }
-	table col.c10 { width: 150px;}
-	table col.c11 { width: 120px;}
+	table col.c5 { width: 125px;}
+	table col.c6 { width: 125px;}
+	table col.c7 { width: 110px;}
+	table col.c8 { width: 130px;}
+	table col.c9 { width: 100px;}
+	table col.c10 { width: 80px; }
+	table col.c11 { width: 150px;}
 	table col.c12 { width: 120px;}
-	table col.c13 { width: 200px;}
-	table col.c14 { width: 60px;}
-	table col.c15 {  width: auto;}
+	table col.c13 { width: 120px;}
+	table col.c14 { width: 200px;}
+	table col.c15 { width: 150px;}
+	table col.c16 { width: 50px;}
+	table col.c17 { width: auto;}
 	.col-md-4{ white-space: nowrap !important;}
 </style>
 
@@ -60,12 +62,11 @@
 	<div class="portlet-body">
 		<div class="portlet-body">
         	<div id="gridview" >
-				<table class="resultset" id="grid"></table>
 				<!--header-->
 				<div id="cHeader">
 					<div id="tHeader">    	
 						<table id="tbheader" width="100%" cellspacing="0" border="1" >
-							<?php for($i=1; $i< 16; $i++){?>
+							<?php for($i=1; $i< 18; $i++){?>
 								<col class="c<?=$i;?>">
 							<?php }?>
 							<tr>							
@@ -75,6 +76,7 @@
 								<th id="ord_rt.roomtype_name"><?=getLanguage('loai-phong')?></th>
 								<th id="ord_odh.fromdate"><?=getLanguage('bat-dau')?></th>
 								<th id="ord_odh.todate"><?=getLanguage('ket-thuc')?></th>
+								<th><?=getLanguage('thoi-gian')?></th>
 								<th id="ord_odh.price_type"><?=getLanguage('gia-ap-dung')?></th>
 								<th id="ord_odh.price"><?=getLanguage('tien-phong')?></th>
 								<th><?=getLanguage('so-khach')?></th>
@@ -82,6 +84,7 @@
 								<th id="ord_odh.customer_cmnd"><?=getLanguage('cmnd')?></th>
 								<th id="ord_odh.customer_phone"><?=getLanguage('dien-thoai')?></th>
 								<th id="ord_odh.description"><?=getLanguage('ghi-chu')?></th>
+								<th id="ord_odh.branchid"><?=getLanguage('chi-nhanh')?></th>
 								<th></th>
 								<th></th>
 							</tr>
@@ -93,24 +96,54 @@
 				<div id="data">
 					<div id="gridView">
 						<table id="tbbody" width="100%" cellspacing="0" border="1">
-							<?php for($i=1; $i < 16; $i++){?>
+							<?php for($i=1; $i < 18; $i++){?>
 								<col class="c<?=$i;?>">
 							<?php }?>
 							<tr class="row-search">
 								<td></td>
 								<td></td>
 								<td>
-									<input type="text" name="roomtype_name" id="roomtype_name" class="searchs form-control " />
+									<input type="text" name="room_name" id="room_name" class="searchs form-control " />
 								</td>
 								<td>
-									<input type="text" name="count_beds" id="count_beds" class="searchs form-control " />
+									<select id="roomtypeid" name="roomtypeid" class="combos">
+										<?php foreach($roomTypes as $item){?>
+											<option value="<?=$item->id;?>"><?=$item->roomtype_name;?></option>
+										<?php }?>
+									</select>
 								</td>
 								<td>
-									<input type="text" name="count_person" id="count_person" class="searchs form-control " />
+									<div id="click_formdate" class="input-group date date-picker" data-date-format="<?=cfdateHtml();?>">
+										<input value="" type="text" id="formdate" placeholder="<?=cfdateHtml();?>" name="formdate" class="form-control searchs" >
+										<span class="input-group-btn ">
+											<button class="btn default btn-picker" type="button"><i class="fa fa-calendar "></i></button>
+										</span>
+									</div>
 								</td>
 								<td>
-									<input type="text" name="description" id="description" class="searchs form-control " />
+									<div id="click_todate" class="input-group date date-picker" data-date-format="<?=cfdateHtml();?>">
+										<input value="" type="text" id="todate" placeholder="<?=cfdateHtml();?>" name="todate" class="form-control searchs" >
+										<span class="input-group-btn ">
+											<button class="btn default btn-picker" type="button"><i class="fa fa-calendar "></i></button>
+										</span>
+									</div>
 								</td>
+								<td></td>
+								<td>
+									<select id="price_type" name="price_type" class="combos">
+										<option value="0"><?=getLanguage('gia-chuan');?></option>
+										<option value="-1"><?=getLanguage('thuong-luong');?></option>
+										<?php foreach($priceLists as $item){?>
+											<option value="<?=$item->id;?>"><?=$item->roomprice_name;?></option>
+										<?php }?>
+									</select>
+								</td>
+								<td><input type="text" name="price" id="price" class="searchs form-control " /></td>
+								<td></td>
+								<td><input type="text" name="customer_name" id="customer_name" class="searchs form-control " /></td>
+								<td><input type="text" name="customer_cmnd" id="customer_cmnd" class="searchs form-control " /></td>
+								<td><input type="text" name="customer_phone" id="customer_phone" class="searchs form-control " /></td>
+								<td><input type="text" name="description" id="description" class="searchs form-control " /></td>
 								<td>
 									<select id="branchid" name="branchid" class="combos">
 										<?php foreach($branchs as $item){?>
@@ -118,7 +151,6 @@
 										<?php }?>
 									</select>
 								</td>
-								
 								<td></td>
 								<td></td>
 							</tr>
@@ -144,17 +176,16 @@
 </div> 
 <!--S Modal -->
 <div id="myModalFrom" class="modal fade" role="dialog">
-  <div class="modal-dialog w500">
+  <div class="modal-dialog w800">
     <!-- Modal content-->
     <div class="modal-content ">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title" id="modalTitleFrom"></h4>
+        <h4 class="modal-title" id="formTitle"></h4>
       </div>
       <div id="loadContentFrom" class="modal-body">
       </div>
       <div class="modal-footer">
-		 <button id="actionSave" type="button" class="btn btn-info" ><i class="fa fa-save" aria-hidden="true"></i>  <?=getLanguage('luu');?></button>
         <button id="close" type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times" aria-hidden="true"></i> <?=getLanguage('dong');?></button>
       </div>
     </div>
@@ -211,8 +242,16 @@
 		searchFunction();
 	});
 	function searchFunction(){
-		$("#roomtype_name,#count_person,#count_beds,#description").keyup(function() {
+		$("#room_name,#price,#customer_phone,#customer_name,#customer_phone,#description").keyup(function() {
 			searchList();	
+		});
+		$('#click_formdate').datepicker().on('changeDate', function (ev) {
+			 $(this).datepicker('hide');
+			searchList();
+		});
+		$('#click_todate').datepicker().on('changeDate', function (ev) {
+			 $(this).datepicker('hide');
+			searchList();
 		});
 	}
 	function loadForm(id){
@@ -239,8 +278,24 @@
 				searchList();
 			}
 		});
+		$('#roomtypeid').multipleSelect({
+			filter: true,
+			single: false,
+			placeholder: "<?=getLanguage('chon-loai-phong')?>",
+			onClick: function(view){
+				searchList();
+			}
+		});
+		$('#price_type').multipleSelect({
+			filter: true,
+			single: false,
+			placeholder: "<?=getLanguage('chon-gia-ap-dung')?>",
+			onClick: function(view){
+				searchList();
+			}
+		});
 	}
-	function save(){
+	/*function save(){
 		var id = $('#id').val(); 
 		var func = 'save';
 		if(id != ''){
@@ -294,23 +349,25 @@
 				}
 			}
 		});
-	}
+	}*/
     function funcList(obj){
 		$('.edit').each(function(e){
 			$(this).click(function(){ 
-				 var roomtype_name = $('.roomtype_name').eq(e).html().trim();
+				 /*var roomtype_name = $('.roomtype_name').eq(e).html().trim();
 				 var bank_name = $('.bank_name').eq(e).html().trim();
 				 var description = $('.description').eq(e).html().trim();
 				 var id = $(this).attr('id');
 				 $('#id').val(id);	
 				 $('#roomtype_name').val(roomtype_name);
 				 $('#bank_name').val(bank_name);
-				 $('#description').val(description);
+				 $('#description').val(description);*/
 			});
 		});	
 		$('.edititem').each(function(e){
 			$(this).click(function(){
 				var id = $(this).attr('id');
+				var roomname = $(this).attr('roomname');
+				$('#formTitle').html("<?=getLanguage('danh-sach-khac-hang');?>: "+roomname);
 				loadForm(id);
 			});
 		});

@@ -22,6 +22,8 @@ class Orderroomhistory extends CI_Controller {
         $this->_view();
     }
 	function _view(){ 
+		//$a = 5%3;
+		//echo $a; exit;
 		$data = new stdClass(); 
 		$login = $this->login;
 		$permission = $this->base_model->getPermission($login, $this->route);
@@ -34,6 +36,8 @@ class Orderroomhistory extends CI_Controller {
 	    $data->controller = base_url().$this->route;
 		$data->routes = $this->route;
 		$data->branchs = $this->base_model->getBranch($login->branchid); 
+		$data->roomTypes = $this->base_model->getRoomType($login->branchid);
+		$data->priceLists = $this->model->getPriceList();
 		$content = $this->load->view('view',$data,true);
 		$this->site->write('content',$content,true);
 		$this->site->write('title',getLanguage('lich-su-dat-phong'),true);
@@ -43,21 +47,9 @@ class Orderroomhistory extends CI_Controller {
 		$login = $this->login;
 		$id = $this->input->post('id');
 		$find = $this->model->findID($id);
-		if(empty($find->id)){
-			$tbs = $this->base_model->loadTable();
-			$find = $this->base_model->getColumns($tbs['hotel_roomtype']);
-		}
 		$data = new stdClass();
         $result = new stdClass();
-		$data->finds = $find;  
-		if(empty($id)){
-			$result->title = getLanguage('them-moi');
-		}
-		else{
-			$result->title = getLanguage('sua');
-		}
-		$data->branchid = $login->branchid;
-		
+		$data->datas = $find;  
         $result->content = $this->load->view('form', $data, true);
 		$result->id = $id;
         echo json_encode($result); exit;
@@ -73,10 +65,13 @@ class Orderroomhistory extends CI_Controller {
 		$searchs['index'] = $this->input->post('index');
 		$data = new stdClass();
 		$result = new stdClass();
+		$data->priceType = $this->model->getPriceType();
 		$query = $this->model->getList($searchs,$page,$rows);
 		$count = $this->model->getTotal($searchs);
 		$data->datas = $query;
 		$data->start = $start;
+		$data->timeNow  = gmdate("Y-m-d H:i", time() + 7 * 3600);
+		
 		$data->permission = $this->base_model->getPermission($this->login, $this->route);
 		
 		$page_view=$this->site->pagination($count,$rows,5,$this->route,$page);

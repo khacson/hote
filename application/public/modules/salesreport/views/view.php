@@ -169,19 +169,19 @@
 						<li id="search">
 							<button class="button">
 								<i class="fa fa-search"></i>
-								<?=getLanguage('all','search')?>
+								<?=getLanguage('search')?>
 							</button>
 						</li>
 						<li id="refresh" >
 							<button class="button">
 								<i class="fa fa-refresh"></i>
-								<?=getLanguage('all','refresh')?>
+								<?=getLanguage('refresh')?>
 							</button>
 						</li>
 						<li id="export">
 							<button class="button">
 								<i class="fa fa-file-excel-o"></i>
-								Excel
+								<?=getLanguage('refresh')?>
 							</button>
 						</li>
 					</ul>

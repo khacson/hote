@@ -25,7 +25,7 @@
 	</div>
 	<div class="col-md-12 mtop10">
 		<div class="form-group">
-			<label class="control-label col-md-4"><?=getLanguage('cong-ty')?></label>
+			<label class="control-label col-md-4"><?=getLanguage('cong-ty');?></label>
 			<div class="col-md-8">
 				<select name="input_companyid" class="combos-input select2me form-control" id="input_companyid" data-placeholder="<?=getLanguage('chon-cong-ty')?>">
 					<?php if(count($companys) > 1){?>
