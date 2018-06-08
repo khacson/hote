@@ -7,10 +7,6 @@
   <li style="float:right;">
 	 <button type="button" style="margin-top:10px;" class="close" data-dismiss="modal">&times;</button>
   </li>
-  <li style="padding-top:5px; float:right; margin-right:20px;">
-		<button id="play" data-toggle="tooltip" title="Play" type="button" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-play"></span></button>
-		<button id="stopAll" data-toggle="tooltip" title="Stop streams" type="button" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-stop"></span></button>
-  </div>
 </ul>
 <div class="tab-content">
     <div id="tabhome" class="tab-pane fade in active">
@@ -232,57 +228,139 @@
 				</div>
 			</div>
 		</div>
-		 <!--E Row-->
-		<div class="row mtop10">
-			<!--S Camera-->
-			<div id="QR-Code" class="container" style="width:100%">
-					<div class="panel panel-primary">
-						<div class="panel-heading" style="display: inline-block;width: 100%; padding:2px 10px;">
-							<h4 style="width:50%;float:left;">Chụp hình</h4>
-							<div style="width:50%;float:right;margin-top: 5px;margin-bottom: 5px;text-align: right;">
-							<!--<select id="cameraId" class="form-control" style="display: inline-block;width: auto;"></select>-->
-							<button id="save" data-toggle="tooltip" title="Image shoot" type="button" class="btn btn-info btn-sm disabled"><span class="glyphicon glyphicon-picture"></span></button>
-							<button id="save2" data-toggle="tooltip" title="Image shoot" type="button" class="btn btn-info btn-sm disabled"><span class="glyphicon glyphicon-picture"></span></button>
-							
+		<!--E Row-->
+		<!--S Chup hình-->
+		<div class="portlet box blue mtop10">
+			<div class="portlet-title">
+				<div class="caption caption2">
+					<div class="brc mtop3"><i class="fa fa-camera" aria-hidden="true"></i> Chụp hình giấy tờ tùy thân</div>
+				</div>
+				<div class="tools">
+					<button style="margin-top:-6px;" id="play" data-toggle="tooltip" title="Play" type="button" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-play"></span></button>
+					<button style="margin-top:-6px;" id="stopAll" data-toggle="tooltip" title="Stop streams" type="button" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-stop"></span></button>
+					<a href="javascript:;" class="expand"></a>
+				</div>
+			</div>
+			<!--S content--> 
+			<div class="portlet-body" style="display: none;">
+				<div class="row">
+					<div class="col-md-6" style="text-align: center;">
+						<div class="well" style="position: relative;display: inline-block;">
+							<canvas id="qr-canvas"  width="420" height="315"></canvas>
+							<div class="scanner-laser laser-rightBottom" style="opacity: 0.5;"></div>
+							<div class="scanner-laser laser-rightTop" style="opacity: 0.5;"></div>
+							<div class="scanner-laser laser-leftBottom" style="opacity: 0.5;"></div>
+							<div class="scanner-laser laser-leftTop" style="opacity: 0.5;"></div>
 						</div>
+						<!--QR-Code-->
+						<div class="container" style="width:100%; margin-top:-10px;">
+							<div class="panel panel-primary">
+									<div class="panel-heading" style="display: inline-block;width: 100%; padding:2px 10px;">
+										<h4 style="width:50%;float:left;"><?=getLanguage('khach-hang');?> 4</h4>
+										<div style="width:50%;float:right;margin-top: 5px;margin-bottom: 5px;text-align: right;">
+										<button title="Chụp mặt trước" id="savec3" data-toggle="tooltip" title="Image shoot" type="button" class="btn btn-info btn-sm disabled"><i class="fa fa-camera" aria-hidden="true"></i></button>
+										<button  title="Chụp mặt sau"  id="savec33" data-toggle="tooltip" title="Image shoot" type="button" class="btn btn-info btn-sm disabled"><i class="fa fa-camera-retro" aria-hidden="true"></i></button>
+									</div>
+								</div>
+								<div class="panel-body" style="padding:0;">
+									<div class="col-md-6" style="text-align: center; padding:2px; height:115px;">
+										<div class="well" style="position: relative;display: inline-block; padding:5px !important;">
+											<img id="scanned-img-c3" src="" width="140" height="90">
+										</div>
+									</div>
+									 <div class="col-md-6" style="text-align: center; padding:2px; height:115px;">
+										<div class="well" style="position: relative;display: inline-block;  padding:5px !important;">
+											<img id="scanned-img-c33" src="" width="140"height="90">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!--E QR-Code-->
 					</div>
-					<div class="panel-body">
-						<div class="col-md-4" style="text-align: center;">
-							<div class="well" style="position: relative;display: inline-block;">
-								<canvas id="qr-canvas"  width="210" height="150"></canvas>
-								<div class="scanner-laser laser-rightBottom" style="opacity: 0.5;"></div>
-								<div class="scanner-laser laser-rightTop" style="opacity: 0.5;"></div>
-								<div class="scanner-laser laser-leftBottom" style="opacity: 0.5;"></div>
-								<div class="scanner-laser laser-leftTop" style="opacity: 0.5;"></div>
+					<div class="col-md-6">
+						<!--QR-Code-->
+						<div class="container" style="width:100%">
+							<div class="panel panel-primary">
+									<div class="panel-heading" style="display: inline-block;width: 100%; padding:2px 10px;">
+										<h4 style="width:50%;float:left;"><?=getLanguage('khach-hang');?> 1</h4>
+										<div style="width:50%;float:right;margin-top: 5px;margin-bottom: 5px;text-align: right;">
+										<!--<select id="cameraId" class="form-control" style="display: inline-block;width: auto;"></select>-->
+										<button title="Chụp mặt trước" id="save" data-toggle="tooltip" title="Image shoot" type="button" class="btn btn-info btn-sm disabled"><i class="fa fa-camera" aria-hidden="true"></i></button>
+										<button  title="Chụp mặt sau"  id="save2" data-toggle="tooltip" title="Image shoot" type="button" class="btn btn-info btn-sm disabled"><i class="fa fa-camera-retro" aria-hidden="true"></i></button>
+									</div>
+								</div>
+								<div class="panel-body" style="padding:0;">
+									<div class="col-md-6" style="text-align: center; padding:2px; height:115px;">
+										<div class="well" style="position: relative;display: inline-block; padding:5px !important;">
+											<img id="scanned-img" src="" width="140" height="90">
+										</div>
+									</div>
+									 <div class="col-md-6" style="text-align: center; padding:2px; height:115px;">
+										<div class="well" style="position: relative;display: inline-block;  padding:5px !important;">
+											<img id="scanned-img-2" src=""  width="140" height="90">
+										</div>
+									</div>
+								</div>
 							</div>
-						   
 						</div>
-						<div class="col-md-4" style="text-align: center;">
-							<div class="well" style="position: relative;display: inline-block;">
-								<img id="scanned-img" src=""  width="210" height="150">
+						<!--E QR-Code-->
+						<!--QR-Code-->
+						<div class="container" style="width:100%; margin-top:-10px;">
+							<div class="panel panel-primary">
+									<div class="panel-heading" style="display: inline-block;width: 100%; padding:2px 10px;">
+										<h4 style="width:50%;float:left;"><?=getLanguage('khach-hang');?> 2</h4>
+										<div style="width:50%;float:right;margin-top: 5px;margin-bottom: 5px;text-align: right;">
+										<button title="Chụp mặt trước" id="savec1" data-toggle="tooltip" title="Image shoot" type="button" class="btn btn-info btn-sm disabled"><i class="fa fa-camera" aria-hidden="true"></i></button>
+										<button  title="Chụp mặt sau"  id="savec11" data-toggle="tooltip" title="Image shoot" type="button" class="btn btn-info btn-sm disabled"><i class="fa fa-camera-retro" aria-hidden="true"></i></button>
+									</div>
+								</div>
+								<div class="panel-body" style="padding:0;">
+									<div class="col-md-6" style="text-align: center; padding:2px; height:115px;">
+										<div class="well" style="position: relative;display: inline-block; padding:5px !important;">
+											<img id="scanned-img-c1" src=""  width="140" height="90">
+										</div>
+									</div>
+									 <div class="col-md-6" style="text-align: center; padding:2px; height:115px;">
+										<div class="well" style="position: relative;display: inline-block;  padding:5px !important;">
+											<img id="scanned-img-c11" src=""  width="140" height="90">
+										</div>
+									</div>
+								</div>
 							</div>
-							<!--<div class="caption">
-								<p id="scanned-QR"></p>
-							</div>-->
 						</div>
-						 <div class="col-md-4" style="text-align: center;">
-							<div class="well" style="position: relative;display: inline-block;">
-								<img id="scanned-img-2" src="" width="210" height="150">
+						<!--E QR-Code-->
+						<!--QR-Code-->
+						<div class="container" style="width:100%; margin-top:-10px;">
+							<div class="panel panel-primary">
+									<div class="panel-heading" style="display: inline-block;width: 100%; padding:2px 10px;">
+										<h4 style="width:50%;float:left;"><?=getLanguage('khach-hang');?> 3</h4>
+										<div style="width:50%;float:right;margin-top: 5px;margin-bottom: 5px;text-align: right;">
+										<button title="Chụp mặt trước" id="savec2" data-toggle="tooltip" title="Image shoot" type="button" class="btn btn-info btn-sm disabled"><i class="fa fa-camera" aria-hidden="true"></i></button>
+										<button  title="Chụp mặt sau"  id="savec22" data-toggle="tooltip" title="Image shoot" type="button" class="btn btn-info btn-sm disabled"><i class="fa fa-camera-retro" aria-hidden="true"></i></button>
+									</div>
+								</div>
+								<div class="panel-body" style="padding:0;">
+									<div class="col-md-6" style="text-align: center; padding:2px; height:115px;">
+										<div class="well" style="position: relative;display: inline-block; padding:5px !important;">
+											<img id="scanned-img-c2" src="" width="140" height="90">
+										</div>
+									</div>
+									 <div class="col-md-6" style="text-align: center; padding:2px; height:115px;">
+										<div class="well" style="position: relative;display: inline-block;  padding:5px !important;">
+											<img id="scanned-img-c22" src="" width="140" height="90">
+										</div>
+									</div>
+								</div>
 							</div>
-							<!--<div class="caption">
-								<p id="scanned-QR"></p>
-							</div>-->
 						</div>
-					</div>
-					<div class="panel-footer">
+						<!--E QR-Code-->
 					</div>
 				</div>
 			</div>
-		<!--E Camera-->
+			<!--E content-->
 		</div>
-		<div class="row mtop10">
-			
-		</div>
+		<div class="row mtop10"></div>
 	</div>
 	<!--E Home-->
 	<div id="tabservice" class="tab-pane fade">

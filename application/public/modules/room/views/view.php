@@ -5,14 +5,15 @@
 	table col.c4 { width: 180px;}
 	table col.c5 { width: 100px;}
 	table col.c6 { width: 100px;}
-	table col.c7 { width: 120px;}
-	table col.c8 { width: 100px;}
+	table col.c7 { width: 100px;}
+	table col.c8 { width: 120px;}
 	table col.c9 { width: 100px;}
-	table col.c10 { width: 120px;}
-	table col.c11 { width: 150px;}
+	table col.c10 { width: 100px;}
+	table col.c11 { width: 120px;}
 	table col.c12 { width: 150px;}
-	table col.c13 { width: 70px;}
-	table col.c14 { width: auto;}
+	table col.c13 { width: 150px;}
+	table col.c14 { width: 70px;}
+	table col.c15 { width: auto;}
 	.col-md-4{ white-space: nowrap !important;}
 </style>
 
@@ -74,7 +75,7 @@
 				<div id="cHeader">
 					<div id="tHeader">    	
 						<table id="tbheader" width="100%" cellspacing="0" border="1" >
-							<?php for($i=1; $i< 15; $i++){?>
+							<?php for($i=1; $i< 16; $i++){?>
 								<col class="c<?=$i;?>">
 							<?php }?>
 							<tr>							
@@ -83,6 +84,7 @@
 								<th id="ord_r.room_name"><?=getLanguage('ten-phong')?></th>
 								<th id="ord_r.roomtypeid"><?=getLanguage('loai-phong')?></th>
 								<th id="ord_r.price"><?=getLanguage('gia-theo-ngay')?></th>
+								<th id="ord_r.price_night"><?=getLanguage('gia-qua-dem')?></th>
 								<th id="ord_r.price_hour"><?=getLanguage('gia-theo-gio')?></th>
 								<th id="ord_r.price_hour_next"><?=getLanguage('gia-them-gio')?></th>
 								<th id="ord_r.price_week"><?=getLanguage('gia-tuan')?></th>
@@ -101,7 +103,7 @@
 				<div id="data">
 					<div id="gridView">
 						<table id="tbbody" width="100%" cellspacing="0" border="1">
-							<?php for($i=1; $i < 15; $i++){?>
+							<?php for($i=1; $i < 16; $i++){?>
 								<col class="c<?=$i;?>">
 							<?php }?>
 							<tr class="row-search">
@@ -119,6 +121,9 @@
 								</td>
 								<td>
 									<input type="text" name="price" id="price" class="searchs form-control " />
+								</td>
+								<td>
+									<input type="text" name="price_night" id="price_night" class="searchs form-control " />
 								</td>
 								<td>
 									<input type="text" name="price_hour" id="price_hour" class="searchs form-control " />

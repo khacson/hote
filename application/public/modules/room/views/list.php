@@ -11,8 +11,9 @@ foreach ($datas as $key => $item) {
 		</td>
 		<td class="text-center"><?=$i;?></td>
 		<td class="bank_code"><?=$item->room_name;?></td>
-		<td class="roomtype_name"><?=$item->roomtype_name;?></td>
+		<td class="price"><?=$item->roomtype_name;?></td>
 		<td class="count_person text-right"><?=number_format($item->price);?></td>
+		<td class="price_night text-right"><?=number_format($item->price_night);?></td>
 		<td class="price_hour text-right"><?=number_format($item->price_hour);?></td>
 		<td class="price_hour_next text-right"><?=number_format($item->price_hour_next);?></td>
 		<td class="price_week text-right"><?=number_format($item->price_week);?></td>

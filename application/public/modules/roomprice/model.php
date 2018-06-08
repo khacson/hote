@@ -25,6 +25,7 @@
 		$array = array();
 		foreach($query as $item){
 			$array[$item->roomid]['price'] = $item->price;
+			$array[$item->roomid]['price_night'] = $item->price_night;
 			$array[$item->roomid]['price_week'] = $item->price_week;
 			$array[$item->roomid]['price_month'] = $item->price_month;
 			$array[$item->roomid]['price_hour'] = $item->price_hour;
@@ -106,6 +107,7 @@
 		$id = $this->model->table($tb['hotel_roomprice'])->save('',$array);	
 		//if
 		$theongay = $valueItem['theongay']; 
+		$quadem = $valueItem['quadem']; 
 		$theogio = $valueItem['theogio']; 
 		
 		$giothu1 = $valueItem['giothu1']; 
@@ -125,6 +127,7 @@
 			foreach($theongay as $key=>$val){
 				if($i == 1){
 					$arrayDetail['price'] =  fmNumberSave(trim($val));
+					$arrayDetail['price_night'] =  fmNumberSave(trim($quadem[$key]));
 					$arrayDetail['price_week'] =  fmNumberSave(trim($giotuan[$key]));
 					$arrayDetail['price_month'] =  fmNumberSave(trim($giothang[$key]));
 					$arrayDetail['price_hour'] =  fmNumberSave(trim($theogio[$key]));
@@ -142,7 +145,7 @@
 				$i++;
 			}
 			$arrayDetail['branchid'] = $branchid;
-			$arrayDetail['roompriceid'] = $id;
+			$arrayDetail['roompriceid'] = $id; 
 			foreach($theongay as $key=>$val){
 				$arrayDetail['roomid'] = $key;
 				$this->model->table($tb['hotel_roomprice_detail'])->insert($arrayDetail);	
@@ -153,6 +156,7 @@
 			foreach($theongay as $key=>$val){
 				$arrayDetail['price'] =  fmNumberSave(trim($val));
 				if(!empty($val)){
+					$arrayDetail['price_night'] =  fmNumberSave(trim($quadem[$key]));
 					$arrayDetail['price_week'] =  fmNumberSave(trim($giotuan[$key]));
 					$arrayDetail['price_month'] =  fmNumberSave(trim($giothang[$key]));
 					$arrayDetail['price_hour'] =  fmNumberSave(trim($theogio[$key]));
@@ -182,24 +186,24 @@
 		
 	}
 	function edits($array,$id,$valueItem,$issave){
-		 $this->db->trans_begin();
-		 $tb = $this->base_model->loadTable();
-		 $branchid = $this->login->branchid;
-		 $check = $this->model->table($tb['hotel_roomprice'])
+		$this->db->trans_begin();
+		$tb = $this->base_model->loadTable();
+		$branchid = $this->login->branchid;
+		$check = $this->model->table($tb['hotel_roomprice'])
 							 ->select('id')
 							 ->where('isdelete',0)
 							 ->where('id <>',$id)
 							 ->where('roomprice_name',$array['roomprice_name'])
 							 ->where('branchid',$branchid)
 							 ->find();
-		 if(!empty($check->id)){
-			 return -1;	
-		 }
-		 $array['branchid'] = $branchid;
-		 $result = $this->model->table($tb['hotel_roomprice'])->where('id',$id)->update($array);	
-		 $theongay = $valueItem['theongay']; 
+		if(!empty($check->id)){
+			return -1;	
+		}
+		$array['branchid'] = $branchid;
+		$result = $this->model->table($tb['hotel_roomprice'])->where('id',$id)->update($array);	
+		$theongay = $valueItem['theongay']; 
 		$theogio = $valueItem['theogio']; 
-		
+		$quadem = $valueItem['quadem']; 
 		$giothu1 = $valueItem['giothu1']; 
 		$giothu2 = $valueItem['giothu2'];
 		$giothu3 = $valueItem['giothu3'];
@@ -209,8 +213,7 @@
 		$giothu7 = $valueItem['giothu7'];
 		
 		$giotuan = $valueItem['giotuan']; 
-		$giothang = $valueItem['giothang']; 
-		
+		$giothang = $valueItem['giothang'];  
 		$this->model->table($tb['hotel_roomprice_detail'])->where('roompriceid',$id)->delete();
 		if($issave == 1){//Láy giá phòng đầu ap cho toàn bộ các phòng
 			$i = 1;
@@ -218,6 +221,7 @@
 			foreach($theongay as $key=>$val){
 				if($i == 1){
 					$arrayDetail['price'] =  fmNumberSave(trim($val));
+					$arrayDetail['price_night'] =  fmNumberSave(trim($quadem[$key]));
 					$arrayDetail['price_week'] =  fmNumberSave(trim($giotuan[$key]));
 					$arrayDetail['price_month'] =  fmNumberSave(trim($giothang[$key]));
 					$arrayDetail['price_hour'] =  fmNumberSave(trim($theogio[$key]));
@@ -246,6 +250,7 @@
 			foreach($theongay as $key=>$val){
 				$arrayDetail['price'] =  fmNumberSave(trim($val));
 				if(!empty($val)){
+					$arrayDetail['price_night'] =  fmNumberSave(trim($quadem[$key]));
 					$arrayDetail['price_week'] =  fmNumberSave(trim($giotuan[$key]));
 					$arrayDetail['price_month'] =  fmNumberSave(trim($giothang[$key]));
 					$arrayDetail['price_hour'] =  fmNumberSave(trim($theogio[$key]));

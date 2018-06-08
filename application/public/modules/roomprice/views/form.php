@@ -3,7 +3,7 @@
 	table col.cc2 { width: 100px;}
 	table col.cc3 { width: 100px;}
 	table col.cc4 { width: 100px;}
-	table col.cc5 { width: 70px;}
+	table col.cc5 { width: 100px;}
 	table col.cc6 { width: 70px;}
 	table col.cc7 { width: 70px;}
 	table col.cc8 { width: 70px;}
@@ -11,8 +11,9 @@
 	table col.cc10 { width: 70px;}
 	table col.cc11 { width: 70px;}
 	table col.cc12 { width: 70px;}
-	table col.cc13 { width: 80px;}
-	table col.cc14 {   width: auto;}
+	table col.cc13 { width: 70px;}
+	table col.cc14 { width: 80px;}
+	table col.cc115 {   width: auto;}
 	.pding0{
 		padding:0;
 	}
@@ -51,13 +52,14 @@
 				<div id="cHeader">
 					<div id="tHeader">    	
 						<table id="tbheader" width="100%" cellspacing="0" border="1" >
-							<?php for($i=1; $i< 15; $i++){?>
+							<?php for($i=1; $i< 16; $i++){?>
 								<col class="cc<?=$i;?>">
 							<?php }?>
 							<tr>							
 								<th><?=getLanguage('stt')?></th>								
 								<th><?=getLanguage('ten-phong')?></th>
 								<th><?=getLanguage('gia-theo-ngay')?></th>
+								<th><?=getLanguage('gia-qua-dem')?></th>
 								<th><?=getLanguage('gia-theo-gio')?></th>
 								<th><?=getLanguage('gio-thu')?> 1</th>
 								<th><?=getLanguage('gio-thu')?> 2</th>
@@ -78,15 +80,21 @@
 				<div id="data">
 					<div id="gridView" style="max-height:400px;">
 						<table id="tbbody" width="100%" cellspacing="0" border="1">
-							<?php for($i=1; $i < 15; $i++){?>
+							<?php for($i=1; $i < 16; $i++){?>
 								<col class="cc<?=$i;?>">
 							<?php }?>
 							<tbody id="grid-rows">
-								<?php $j=1; foreach($roomLists as $item){
+								<?php $j=1; 
+								//echo '<pre>';print_r($listDetails);
+								foreach($roomLists as $item){
 									
 									$theongay = 0;
 									if(isset($listDetails[$item->id]['price'])){
 										$theongay = $listDetails[$item->id]['price'];
+									}
+									$quadem = 0;
+									if(isset($listDetails[$item->id]['price_night'])){
+										$quadem = $listDetails[$item->id]['price_night'];
 									}
 									$theogio = 0;
 									if(isset($listDetails[$item->id]['price_hour'])){
@@ -135,6 +143,10 @@
 										<td class="pding0">
 											<input ids="<?=$item->id;?>" type="text" name="theongay_<?=$j;?>"  id="theongay_<?=$j;?>" class="form-control fm-number theongay" value="<?=$theongay;?>" />
 										</td>
+										<td class="pding0">
+											<input ids="<?=$item->id;?>" type="text" name="quadem_<?=$j;?>"  id="quadem_<?=$j;?>" class="form-control fm-number quadem" value="<?=$quadem;?>" />
+										</td>
+										
 										<td class="pding0">
 											<input ids="<?=$item->id;?>" type="text" name="theogio_<?=$j;?>"  id="theogio_<?=$j;?>" class="form-control fm-number theogio" value="<?=$theogio;?>" />
 										</td>
@@ -190,6 +202,11 @@
 		$('.theongay').each(function(e){
 			 var ids = $(this).attr('ids');
 			 theongay[ids] = $('#theongay_'+ids).val();
+		});
+		var quadem = {};
+		$('.quadem').each(function(e){
+			 var ids = $(this).attr('ids');
+			 quadem[ids] = $('#quadem_'+ids).val();
 		});
 		//1
 		var theogio = {};
@@ -253,6 +270,7 @@
 		});		
 		var objReq = {};
 		objReq.theongay = theongay;
+		objReq.quadem = quadem;
 		objReq.theogio = theogio;
 		objReq.giothu1 = giothu1;
 		objReq.giothu2 = giothu2;

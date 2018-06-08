@@ -131,7 +131,7 @@
 </div> 
 <!--S Modal -->
 <div id="myModalFrom" class="modal fade" role="dialog">
-  <div class="modal-dialog" style="width:1100px;">
+  <div class="modal-dialog" style="width:1150px;">
     <!-- Modal content-->
     <div class="modal-content ">
       <div class="modal-header">

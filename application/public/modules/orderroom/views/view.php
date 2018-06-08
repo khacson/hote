@@ -118,7 +118,7 @@
 <!-- BEGIN PAGE HEADER-->
 <!--S Modal -->
 <div id="myModalFrom" class="modal fade" role="dialog">
-  <div class="modal-dialog w900">
+  <div class="modal-dialog" style="width:1024px;">
     <!-- Modal content-->
     <div class="modal-content ">
       <div id="loadContentFrom" class="modal-body">

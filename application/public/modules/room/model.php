@@ -31,6 +31,12 @@
 		if(!empty($search['count_person'])){
 			$sql.= " and r.count_person  like '%".addslashes($search['count_person'])."%' ";	
 		}
+		if(!empty($search['price'])){
+			$sql.= " and r.price  like '%".addslashes($search['price'])."%' ";	
+		}
+		if(!empty($search['price_night'])){
+			$sql.= " and r.price_night  like '%".addslashes($search['price_night'])."%' ";	
+		}
 		if(!empty($search['price_week'])){
 			$sql.= " and r.price_week  like '%".addslashes($search['price_week'])."%' ";	
 		}
@@ -95,6 +101,7 @@
 		$array['price_hour_next'] = fmNumberSave($array['price_hour_next']);
 		$array['price_week'] = fmNumberSave($array['price_week']);
 		$array['price_month'] = fmNumberSave($array['price_month']);
+		$array['price_night'] = fmNumberSave($array['price_night']);
 		$array['isstatus'] = 1;
 		$check = $this->model->table($tb['hotel_room'])
 					  ->select('id')
@@ -125,6 +132,7 @@
 		 $array['price_hour_next'] = fmNumberSave($array['price_hour_next']);
 		 $array['price_week'] = fmNumberSave($array['price_week']);
 		 $array['price_month'] = fmNumberSave($array['price_month']);
+		 $array['price_night'] = fmNumberSave($array['price_night']);
 		 $check = $this->model->table($tb['hotel_room'])
 		 ->select('id')
 		 ->where('isdelete',0)

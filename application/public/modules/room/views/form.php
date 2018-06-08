@@ -36,6 +36,16 @@
 	</div>
 	<div class="col-md-12 mtop10">
 		<div class="form-group">
+			<label class="control-label col-md-4"><?=getLanguage('gia-qua-dem');?></label>
+			<div class="col-md-8">
+				<input type="text" name="input_price_night"  id="input_price_night" class="form-input form-control fm-number" 
+				value="<?=$finds->price_night;?>" placeholder=""
+				/>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-12 mtop10">
+		<div class="form-group">
 			<label class="control-label col-md-4"><?=getLanguage('gia-theo-gio');?></label>
 			<div class="col-md-8">
 				<input type="text" name="input_price_hour"  id="input_price_hour" class="form-input form-control fm-number" 
