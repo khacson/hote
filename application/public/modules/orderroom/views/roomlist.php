@@ -23,7 +23,7 @@
 	}
 	?>
 	<div class="col-md-2 dashboard-item dashboard-items" >
-		<div title="-<?=getLanguage('theo-ngay');?>: <?=number_format($item->price);?>đ  -<?=getLanguage('theo-gio');?>: <?=number_format($item->price_hour);?>đ -<?=getLanguage('gia-them-gio');?>: <?=number_format($item->price_hour_next);?>đ -<?=getLanguage('theo-tuan');?>: <?=number_format($item->price_week);?>đ -<?=getLanguage('theo-thang');?>: <?=number_format($item->price_month);?>đ" class="dashboard-stat dashboard-stats" <?=$style;?> data-toggle="modal" data-target="#myModalFrom" 
+		<div title="-<?=getLanguage('theo-ngay');?>: <?=number_format($item->price);?>đ -<?=getLanguage('gia-qua-dem');?>: <?=number_format($item->price_night);?>đ  -<?=getLanguage('theo-gio');?>: <?=number_format($item->price_hour);?>đ -<?=getLanguage('gia-them-gio');?>: <?=number_format($item->price_hour_next);?>đ -<?=getLanguage('theo-tuan');?>: <?=number_format($item->price_week);?>đ -<?=getLanguage('theo-thang');?>: <?=number_format($item->price_month);?>đ" class="dashboard-stat dashboard-stats" <?=$style;?> data-toggle="modal" data-target="#myModalFrom" 
 		roomid="<?=$item->id;?>"
 		>
 			<div class="visual">

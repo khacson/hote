@@ -161,6 +161,9 @@ class Orderroom extends CI_Controller {
 			elseif($lease == 4){
 				$prices = number_format($getPrice->price_month);
 			}
+			elseif($lease == 5){
+				$prices = number_format($getPrice->price_night);
+			}
 			else{
 				$prices = number_format($getPrice->price);
 			}
@@ -181,6 +184,9 @@ class Orderroom extends CI_Controller {
 			}
 			elseif($lease == 4){
 				$prices = number_format($getPrice->price_month);
+			}
+			elseif($lease == 5){
+				$prices = number_format($getPrice->price_night);
 			}
 			else{
 				$prices = number_format($getPrice->price);
@@ -368,12 +374,16 @@ class Orderroom extends CI_Controller {
 		$itemList = $this->input->post('itemList');
 		$otherCus = $this->input->post('otherCus'); 
 		$roomid = $this->input->post('roomid');
+		$scanned_img_font1 = $this->input->post('scanned_img_font1');
+		$scanned_img_back1 = $this->input->post('scanned_img_back1');
 		$id = $this->input->post('id');
 		if (!isset($permission['add'])){
 			$result['status'] = 0;
 			$result['csrfHash'] = $token;
 			echo json_encode($result); exit;	
 		}
+		$array['scanned_img_font1'] = $scanned_img_font1;
+		$array['scanned_img_back1'] = $scanned_img_back1;
 		$arr = $this->model->saves($array,$itemList,$otherCus,$roomid,$id);
 		$result['status'] = $arr['status'];
 		$result['msg'] = $arr['msg'];

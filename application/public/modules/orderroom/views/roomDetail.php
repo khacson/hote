@@ -105,6 +105,7 @@
 					<div class="col-md-8">
 						<select id="input_lease" name="input_lease" class="combos-input select2me form-control">
 							<option value="1"><?=getLanguage('theo-ngay');?></option>
+							<option value="5"><?=getLanguage('gia-qua-dem');?></option>
 							<option value="2"><?=getLanguage('theo-gio');?></option>
 							<option value="3"><?=getLanguage('theo-tuan');?></option>
 							<option value="4"><?=getLanguage('theo-thang');?></option>
@@ -678,6 +679,7 @@
 		var otherCus = getCustomerOther();
 		var roomid = $('#roomid').val();
 		var obj = $.evalJSON(search); 
+		var id = $('#id').val();
 		if(obj.fromdate == ''){
 			warning("<?=getLanguage('thoi-gian-bat-dau-khong-duoc-trong');?>"); return false;	
 		}
@@ -687,11 +689,24 @@
 		if(obj.customer_cmnd == ''){
 			warning("<?=getLanguage('cmnd-khong-duoc-trong');?>"); return false;	
 		}
+		var scanned_img_font1 = $('#scanned-img').attr('src'); 
+		var scanned_img_back1 = $('#scanned-img-2').attr('src'); 
+		var data = new FormData();
+		data.append('search', search);
+		data.append('itemList', itemList);
+		data.append('otherCus', otherCus);
+		data.append('roomid', roomid);
+		data.append('scanned_img_font1', scanned_img_font1);
+		data.append('scanned_img_back1', scanned_img_back1);
+		data.append('id',id);
 		$.ajax({
 			url : controller + "save",
 			type: 'POST',
 			async: false,
-			data: {search:search, itemList:itemList, otherCus:otherCus, roomid:roomid,id:''},
+			data:data,
+			enctype: 'multipart/form-data',
+			processData: false,  
+			contentType: false,   
 			success:function(datas){
 				var obj = $.evalJSON(datas); 
 				$("#token").val(obj.csrfHash);

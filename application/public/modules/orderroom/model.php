@@ -475,6 +475,27 @@
 		}
 		#end
 		#region insert Customer
+		//Khách hàng 1
+		$scanned_img_font1 = $array['scanned_img_font1'];
+		$scanned_img_back1 = $array['scanned_img_back1'];
+		$name_font1 = '';
+		$name_back1 = '';
+		if(!empty($scanned_img_font1)){
+			$img = str_replace('data:image/png;base64,', '', $scanned_img_font1);
+			$img = str_replace(' ', '+', $img);
+			$data = base64_decode($img);
+			$name_font1 = $customer_cmnd.(gmdate("ymdHis", time() + 7 * 3600)).($this->random()).'.png';
+			file_put_contents('files/customer/front_'.$name_font1, $data);
+		}
+		if(!empty($scanned_img_back1)){
+			$img1 = str_replace('data:image/png;base64,', '', $scanned_img_back1);
+			$img1 = str_replace(' ', '+', $img1);
+			$data1 = base64_decode($img1);
+			$name_back1 = $customer_cmnd.(gmdate("ymdHis", time() + 7 * 3600)).($this->random()).'.png';
+			file_put_contents('files/customer/back_'.$name_back1, $data1);
+		}
+		//E Khách hàng 1
+		
 		$customer_name = $array['customer_name'];
 		$customer_cmnd = $array['customer_cmnd'];
 		$checkCustomer = $this->model->table($tb['hotel_customer'])
@@ -486,6 +507,8 @@
 		$arrCustomer  = array();
 		$arrCustomer['customer_name'] = $customer_name;
 		$arrCustomer['identity'] = $customer_cmnd;
+		$arrCustomer['image_front'] = $name_font1;
+		$arrCustomer['image_back'] = $name_back1;
 		if(!empty($array['identity_date'])){
 			$arrCustomer['identity_date'] = fmDateSave($array['identity_date']);
 		}
@@ -891,4 +914,15 @@
 		$array['stt'] = $stt + 1;
 		return $array;
 	}
+	public function random($length = 5, $chars = '0123456789') {
+        $RandomStr = '';
+
+        for ($i = 0; $i < $length; $i++) {
+
+            $pos = mt_rand(0, strlen($chars) - 1);
+
+            $RandomStr .= substr($chars, $pos, 1);
+        }
+        return $RandomStr;
+    }
  }
